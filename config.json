@@ -11,10 +11,12 @@
         "state": "open"
     },
     "menu": {
-        "首页":"./"
+        "首页":"./",
+        "机器学习":"issue_per_label.html?label=AI"
     },
     "friends": {
-        "imuncle" : "https://imuncle.github.io"
+        "imuncle" : "https://imuncle.github.io",
+        "qq" : "3207180297"
     },
     "icons": {
         "Github" : {
