@@ -14,12 +14,12 @@
         - dl 定义列表 内含 <dt> <dd>
     
 3. 超链接
-    * 基本语法 <a href=" 链接目标"  name="" title="提示信息" target="">超链接标题</a>
+    * 基本语法 < a href=" 链接目标"  name="" title="提示信息" target="">超链接标题</a>
     * target打开方式 _blank新窗口 _self同一窗口
     * 书签 href = # + 连接name
 4. 语法
-    * 单标记与双标记 <br>换行 <hr>水平分割线
-    * 属性语法 <hr size="3" color="red" align="center">
+    * 单标记与双标记 < br>换行 < hr>水平分割线
+    * 属性语法 < hr size="3" color="red" align="center" >
     * <html> <head></head> <body></body> </html>
 5. 其他
     * 注释
@@ -27,3 +27,5 @@
     <comment>注释信息</comment>
     * 标题文字 <h#>标题</h#> 1~6
     * 空格 &nbsp
+
+## CSS实现
