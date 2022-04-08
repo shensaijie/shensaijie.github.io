@@ -1,5 +1,7 @@
 # web实践
 
+## 点击[预览blog](https://shensaijie.github.io)
+
 ## html实现
 1. 显示图片
     * 图像要放在<p>标签中，text-align: 设置对齐格式
@@ -29,3 +31,7 @@
     * 空格 &nbsp
 
 ## CSS实现
+
+1. icon圆形
+    * border-radius:50% 圆角 overflow:hidden 超出盒子去掉
+    * margin-top 上外边距为负实现头像一半在背景上
