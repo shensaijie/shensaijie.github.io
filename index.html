@@ -17,6 +17,7 @@
 			overflow: hidden;
         }
     </style>
+    
 
 </head>
 <body>
@@ -29,24 +30,31 @@
    	<h1>Hello 申赛杰</h1>
     <p align="center">方法让人不犯错，好心态让人出彩！</p>
     
+    <script src="https://code.jquery.com/jquery-3.4.1.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
+<div id="content"></div>
+
+<script>
+    $.get('./md/aaa.md', function(response, status, xhr){
+        $("#content").html(marked(response));
+    });
+</script>
     
-    <div id="content"> <iframe width="100%" src="README.md"></iframe></div>
-    <script src="./marked.min.js"></script>
-    <script>
-        $(function(){
-            $.ajax({
-                type:"get",
-                url:"./README.md",
-                dataType:"html",
-                success:function(res){
-                $("#content").append(marked(res));
-                }
-            })
-        })
-    </script>
+    
+    <script src="./js/jquery.min.js"></script>
+    <script src="./js/marked.min.js"></script>
+    
+    <div id="content1"> </div>
+	<script>
+		$.get('../aaa.md', function(response, status, xhr){
+        $("#content1").html(marked(response));
+    });
+	</script>
+    
+    
     
     <div id="content2"></div>
-    <script src="./marked.min.js"></script>
+    <script src="./js/marked.min.js"></script>
     <script >
         document.getElementById('content2').innerHTML = marked.parse('# Marked in the browser\n\nRendered by **marked**.');
     </script>
