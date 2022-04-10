@@ -17,6 +17,7 @@
 			overflow: hidden;
         }
     </style>
+
 </head>
 <body>
   	
@@ -27,6 +28,30 @@
    	</div>
    	<h1>Hello 申赛杰</h1>
     <p align="center">方法让人不犯错，好心态让人出彩！</p>
+    
+    
+    <div id="content"> <iframe width="100%" src="README.md"></iframe></div>
+    <script src="./marked.min.js"></script>
+    <script>
+        $(function(){
+            $.ajax({
+                type:"get",
+                url:"./README.md",
+                dataType:"html",
+                success:function(res){
+                $("#content").append(marked(res));
+                }
+            })
+        })
+    </script>
+    
+    <div id="content2"></div>
+    <script src="./marked.min.js"></script>
+    <script >
+        document.getElementById('content2').innerHTML = marked.parse('# Marked in the browser\n\nRendered by **marked**.');
+    </script>
+    
+    
     <a href="https://blog.csdn.net/aaalalula?type=blog" target="_blank">CSDN</a>
 	<br>
 	<a href="#top">Top</a>
