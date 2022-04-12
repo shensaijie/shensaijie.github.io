@@ -3,65 +3,29 @@
 <head>
     <meta charset="UTF-8">
     <title>申赛杰的web实践</title>
-    <style type="text/css">
-        h1{
-            text-align: center;
-            font-size: 50px;
-        }
-		.icon {
-			margin: auto;
-			margin-top: -75px;
-            height: 130px;
-            width: 130px;
-            border-radius: 50%;
-			overflow: hidden;
-        }
-    </style>
-    
-
+    <link type="text/css" rel="stylesheet" href="css/home.css" >
 </head>
+
 <body>
-  	
-   	<a name="top"><img src="images/page_background.jpg" width="100%"  height="" alt="安娜 谢尔巴科娃"></a>
-   	<div class="icon">
-   		<img src="images/avatar.jpg"  width="130px" height="130px" >
+  	<div class="home">
+  		<a name="top"><img src="images/page_background.jpg" width="100%"  height="" alt="安娜 谢尔巴科娃"></a>
+		<div class="icon">
+			<img src="./images/avatar.jpg"  width="130px" height="130px" >
+		</div>
+		<h1 style = "text-align: center; font-size: 50px;">Hello 申赛杰</h1>
+		<p align="center">人不能两次踩到同一个坑里。</p>		
+  	</div>
+   	
+   	<div class="message">
+   		<a href="blog/blog1.html"><p>建个博客网站，同时学习实践web知识。</p></a>
    		
    	</div>
-   	<h1>Hello 申赛杰</h1>
-    <p align="center">方法让人不犯错，好心态让人出彩！</p>
+   	
+   	
+   	
+    <ul> <a href="https://blog.csdn.net/aaalalula?type=blog" target="_blank">CSDN</a></ul>
+   	<ul> <a href="#top">Top</a></ul>
     
-    <script src="https://code.jquery.com/jquery-3.4.1.min.js"></script>
-<script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
-<div id="content"></div>
-
-<script>
-    $.get('./md/aaa.md', function(response, status, xhr){
-        $("#content").html(marked(response));
-    });
-</script>
-    
-    
-    <script src="./js/jquery.min.js"></script>
-    <script src="./js/marked.min.js"></script>
-    
-    <div id="content1"> </div>
-	<script>
-		$.get('../aaa.md', function(response, status, xhr){
-        $("#content1").html(marked(response));
-    });
-	</script>
-    
-    
-    
-    <div id="content2"></div>
-    <script src="./js/marked.min.js"></script>
-    <script >
-        document.getElementById('content2').innerHTML = marked.parse('# Marked in the browser\n\nRendered by **marked**.');
-    </script>
-    
-    
-    <a href="https://blog.csdn.net/aaalalula?type=blog" target="_blank">CSDN</a>
-	<br>
-	<a href="#top">Top</a>
+	
 </body>
 </html>
