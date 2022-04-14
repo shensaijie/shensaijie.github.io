@@ -1,0 +1,811 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+  <head>
+  <meta charset="UTF-8">
+  <meta 
+    name="viewport"
+    content="width=device-width, initial-scale=1.0, minimum-scale=1.0">
+  <meta 
+    http-equiv="X-UA-Compatible" 
+    content="ie=edge">
+  <meta 
+    name="theme-color" 
+    content="#fff" 
+    id="theme-color">
+  <meta 
+    name="description" 
+    content="shensaijie">
+  <link 
+    rel="icon" 
+    href="/img/ss.png">
+  <title>操作系统动态优先权</title>
+  
+    
+      <meta 
+        property="og:title" 
+        content="操作系统动态优先权">
+    
+    
+      <meta 
+        property="og:url" 
+        content="http://shensaijie.github.io/2021/11/14/C%E8%AF%AD%E8%A8%80%E5%AE%9E%E7%8E%B0%E5%8A%A8%E6%80%81%E4%BC%98%E5%85%88%E6%9D%83%E7%AE%97%E6%B3%95%E8%B0%83%E5%BA%A6%E6%A8%A1%E6%8B%9F/index.html">
+    
+    
+      <meta 
+        property="og:img" 
+        content="/img/avatar.jpg">
+    
+    
+    
+      <meta 
+        property="og:type" 
+        content="article">
+      <meta 
+        property="og:article:published_time" 
+        content="2021-11-14">
+      <meta 
+        property="og:article:modified_time" 
+        content="2022-04-14">
+      <meta 
+        property="og:article:author" 
+        content="shensj">
+      
+        
+          <meta 
+            property="og:article:tag" 
+            content="操作系统，动态优先权">
+        
+      
+    
+  
+  <script>
+    function loadScript(url, cb) {
+      var script = document.createElement('script');
+      script.src = url;
+      if (cb) script.onload = cb;
+      script.async = true;
+      document.body.appendChild(script);
+    }
+    function loadCSS(href, data, attr) {
+      var sheet = document.createElement('link');
+      sheet.ref = 'stylesheet';
+      sheet.href = href;
+      sheet.dataset[data] = attr;
+      document.head.appendChild(sheet);
+    }
+    function changeCSS(cssFile, data, attr) {
+      var oldlink = document.querySelector(data);
+      var newlink = document.createElement("link");
+      newlink.setAttribute("rel", "stylesheet");
+      newlink.setAttribute("href", cssFile);
+      newlink.dataset.prism = attr;
+      document.head.replaceChild(newlink, oldlink);
+    }
+  </script>
+  
+    
+  
+  <script>
+    // control reverse button
+    var reverseDarkList = {
+      dark: 'light',
+      light: 'dark'
+    };
+    var themeColor = {
+      dark: '#1c1c1e',
+      light: '#fff'
+    }
+    // get the data of css prefers-color-scheme
+    var getCssMediaQuery = function() {
+      return window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light';
+    };
+    // reverse current darkmode setting function
+    var reverseDarkModeSetting = function() {
+      var setting = localStorage.getItem('user-color-scheme');
+      if(reverseDarkList[setting]) {
+        setting = reverseDarkList[setting];
+      } else if(setting === null) {
+        setting = reverseDarkList[getCssMediaQuery()];
+      } else {
+        return;
+      }
+      localStorage.setItem('user-color-scheme', setting);
+      return setting;
+    };
+    // apply current darkmode setting
+  </script>
+  
+    <script>
+      var setDarkmode = function(mode) {
+      var setting = mode || localStorage.getItem('user-color-scheme');
+      if(setting === getCssMediaQuery()) {
+        document.documentElement.removeAttribute('data-user-color-scheme');
+        localStorage.removeItem('user-color-scheme');
+        document.getElementById('theme-color').content = themeColor[setting];
+        document.getElementById('theme-color').dataset.mode = setting;
+      } else if(reverseDarkList[setting]) {
+        document.documentElement.setAttribute('data-user-color-scheme', setting);
+        document.getElementById('theme-color').content = themeColor[setting];
+        document.getElementById('theme-color').dataset.mode = setting;
+      } else {
+        document.documentElement.removeAttribute('data-user-color-scheme');
+        localStorage.removeItem('user-color-scheme');
+        document.getElementById('theme-color').content = themeColor[getCssMediaQuery()];
+        document.getElementById('theme-color').dataset.mode = getCssMediaQuery();
+      }
+    };
+    setDarkmode();
+    </script>
+  
+  
+  <link rel="preload" href="//at.alicdn.com/t/font_1946621_i1kgafibvw.css" as="style" >
+  <link rel="preload" href="//at.alicdn.com/t/font_1952792_89b4ac4k4up.css" as="style" >
+  
+  
+    <link rel="preload" href="/js/lib/lightbox/baguetteBox.min.js" as="script">
+    <link rel="preload" href="/js/lib/lightbox/baguetteBox.min.css" as="style" >
+  
+  
+    <link rel="preload" href="/js/lib/lozad.min.js" as="script">
+  
+  
+  
+  
+  
+  
+  
+  <link rel="stylesheet" href="/css/main.css">
+  
+  <link rel="stylesheet" href="//at.alicdn.com/t/font_1946621_i1kgafibvw.css">
+  
+  <link rel="stylesheet" href="//at.alicdn.com/t/font_1952792_89b4ac4k4up.css">
+  
+    <link rel="stylesheet" href="/js/lib/lightbox/baguetteBox.min.css">
+  
+<meta name="generator" content="Hexo 5.4.2"></head>
+
+  <body>
+    <div class="wrapper">
+       
+      <nav class="navbar">
+  <div class="navbar-logo">
+    <span class="navbar-logo-main">
+      
+        <img 
+          class="navbar-logo-img"
+          width="32"
+          height="32"
+          src="/img/ss.png" 
+          alt="blog logo">
+      
+      <span class="navbar-logo-dsc">shensj's blog</span>
+    </span>
+  </div>
+  <div class="navbar-menu">
+    
+      <a 
+        href="/" 
+        class="navbar-menu-item">
+        
+          首页
+        
+      </a>
+    
+      <a 
+        href="/archives" 
+        class="navbar-menu-item">
+        
+          归档
+        
+      </a>
+    
+      <a 
+        href="/tags" 
+        class="navbar-menu-item">
+        
+          标签
+        
+      </a>
+    
+      <a 
+        href="/categories" 
+        class="navbar-menu-item">
+        
+          分类
+        
+      </a>
+    
+      <a 
+        href="/about" 
+        class="navbar-menu-item">
+        
+          关于
+        
+      </a>
+    
+      <a 
+        href="/links" 
+        class="navbar-menu-item">
+        
+          友链
+        
+      </a>
+    
+    <a 
+      class="navbar-menu-item darknavbar" 
+      id="dark">
+      <i class="iconfont icon-weather"></i>
+    </a>
+    <a 
+      class="navbar-menu-item searchnavbar" 
+      id="search">
+      <i 
+        class="iconfont icon-search" 
+        style="font-size: 1.2rem; font-weight: 400;">
+      </i>
+    </a>
+  </div>
+</nav> 
+      
+      <div 
+        id="local-search" 
+        style="display: none">
+        <input
+          class="navbar-menu-item"
+          id="search-input"
+          placeholder="请输入搜索内容..." />
+        <div id="search-content"></div>
+      </div>
+      
+      <div class="section-wrap">
+        <div class="container">
+          <div class="columns">
+            <main class="main-column">
+<article class="card card-content">
+  <header>
+    <h1 class="post-title">
+      操作系统动态优先权
+    </h1>
+  </header>
+  <div class="post-meta post-show-meta">
+    <time datetime="2021-11-14T10:38:58.000Z">
+      <i 
+        class="iconfont icon-calendar" 
+        style="margin-right: 2px;">
+      </i>
+      <span>2021-11-14</span>
+    </time>
+    
+      <span class="dot"></span>
+      
+        <a 
+          href="/categories/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F/" 
+          class="post-meta-link">
+          操作系统
+        </a>
+      
+    
+    
+      <span class="dot"></span>
+      <span>1.2k 字</span>
+    
+  </div>
+  
+    <div 
+      class="post-meta post-show-meta" 
+      style="margin-top: -10px;">
+      <div style="display: flex; align-items: center;">
+        <i 
+          class="iconfont icon-biaoqian" 
+          style="margin-right: 2px; font-size: 1.15rem;">
+        </i>
+        
+          
+          <a 
+            href="/tags/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F%EF%BC%8C%E5%8A%A8%E6%80%81%E4%BC%98%E5%85%88%E6%9D%83/" 
+            class="post-meta-link">
+            操作系统，动态优先权
+          </a>
+        
+      </div>
+    </div>
+  
+  </header>
+  <div 
+    id="section" 
+    class="post-content">
+    <h2 id="一﹑实验目的"><a href="#一﹑实验目的" class="headerlink" title="一﹑实验目的"></a>一﹑实验目的</h2><p>通过动态优先权算法的模拟加深对进程概念和进程调度过程的理解。</p>
+<h2 id="二﹑实验内容与基本要求"><a href="#二﹑实验内容与基本要求" class="headerlink" title="二﹑实验内容与基本要求"></a>二﹑实验内容与基本要求</h2><p>编制模拟动态优先权算法的程序，并给出的例子验证所编写的程序的正确性。<br>1.用C语言实现对N个进程采用动态优先权算法的调度。<br>2.每个用来标识进程的进程控制块PCB可用结构来描述，包括以下字段：<br>    进程标识数ID。<br>    进程优先数PRIORITY，并规定优先数越大的进程，其优先权越高。<br>    进程已占用CPU时间CPUTIME。<br>    进程还需占用的CPU时间ALLTIME。当进程运行完毕时，ALLTIME变为0。<br>    进程的阻塞时间STARTBLOCK，表示当进程再运行STARTBLOCK个时间片后，进程将进入阻塞状态。<br>    进程被阻塞的时间BLOCKTIME，表示已阻塞的进程再等待BLOCKTIME个时间片后，将转换成就绪状态。<br>    进程状态STATE。<br>    队列指针NEXT，用来将PCB排成队列。<br>3.优先数改变的原则：<br>    进程在就绪队列中呆一个时间片，优先数增加1。<br>    进程每运行一个时间片，优先数减3。<br>4.为了清楚地观察每个进程的调度过程，程序应将每个时间片内的进程的情况显示出来，包括正在运行的进程，处于就绪队列中的进程和处于阻塞队列中的进程。</p>
+<pre class="highlight"><span class="line"><span class="meta">#<span class="keyword">include</span><span class="string">&lt;stdio.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="keyword">include</span><span class="string">&lt;stdlib.h&gt;</span></span></span><br><span class="line"><span class="keyword">typedef</span> <span class="class"><span class="keyword">struct</span> <span class="title">PCB</span>&#123;</span></span><br><span class="line">    <span class="type">int</span> ID;      <span class="comment">//进程标识数</span></span><br><span class="line">    <span class="type">int</span> priority;<span class="comment">//优先数</span></span><br><span class="line">    <span class="type">int</span> cpuTime;<span class="comment">//已用时间</span></span><br><span class="line">    <span class="type">int</span> allTime;<span class="comment">//总共还需时间</span></span><br><span class="line">    <span class="type">int</span> startBlock;<span class="comment">//运行多少时间片后阻塞</span></span><br><span class="line">    <span class="type">int</span> blockTime;<span class="comment">//在阻塞队列多长时间后进入就绪状态</span></span><br><span class="line">    <span class="type">int</span> state;<span class="comment">//进程状态1表示运行，2表示就绪，3表示阻塞，0表示运行完</span></span><br><span class="line">    <span class="class"><span class="keyword">struct</span> <span class="title">PCB</span> *<span class="title">next</span>;</span></span><br><span class="line">&#125;PCB,*pcb;</span><br><span class="line">pcb p1,p2,lastp;</span><br><span class="line">pcb ReadyQueue,BlockQueue,RunPCB;</span><br><span class="line">pcb accQueue,acclast;<span class="comment">//完成队列</span></span><br><span class="line"><span class="type">void</span> <span class="title function_">GetPCB</span><span class="params">()</span>;</span><br><span class="line"><span class="type">void</span> <span class="title function_">Run</span><span class="params">()</span>;</span><br><span class="line"><span class="type">void</span> <span class="title function_">PushReady</span><span class="params">(pcb p1)</span>;</span><br><span class="line"><span class="type">void</span> <span class="title function_">ShowQueue</span><span class="params">(<span class="type">int</span> cputime)</span>;</span><br><span class="line"></span><br><span class="line"><span class="type">int</span> <span class="title function_">main</span><span class="params">()</span>&#123;</span><br><span class="line">    ReadyQueue=BlockQueue=RunPCB=<span class="literal">NULL</span>;<span class="comment">//初始化</span></span><br><span class="line">    accQueue=acclast=(pcb)<span class="built_in">malloc</span>(<span class="keyword">sizeof</span>(PCB));</span><br><span class="line">    accQueue-&gt;next = <span class="literal">NULL</span>;</span><br><span class="line">    GetPCB();</span><br><span class="line">    Run();</span><br><span class="line">    system(<span class="string">&quot;pause&quot;</span>);</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="type">void</span> <span class="title function_">GetPCB</span><span class="params">()</span>&#123;</span><br><span class="line">    FILE *fp;</span><br><span class="line">    <span class="keyword">if</span>((fp=fopen(<span class="string">&quot;F://pcb.txt&quot;</span>,<span class="string">&quot;r&quot;</span>))==<span class="literal">NULL</span>)&#123;</span><br><span class="line">        <span class="built_in">printf</span>(<span class="string">&quot;打开文件失败\n&quot;</span>);</span><br><span class="line">        <span class="built_in">exit</span>(<span class="number">1</span>);</span><br><span class="line">    &#125;</span><br><span class="line">    p1 = (pcb)<span class="built_in">malloc</span>(<span class="keyword">sizeof</span>(PCB));</span><br><span class="line">    <span class="keyword">while</span>(<span class="built_in">fscanf</span>(fp,<span class="string">&quot;%d %d %d %d %d %d %d&quot;</span>,&amp;p1-&gt;ID,&amp;p1-&gt;priority,</span><br><span class="line">&amp;p1-&gt;cpuTime,&amp;p1-&gt;allTime,&amp;p1-&gt;startBlock,&amp;p1-&gt;blockTime,&amp;p1-&gt;state)==<span class="number">7</span>)&#123;</span><br><span class="line">        p1-&gt;next = <span class="literal">NULL</span>;</span><br><span class="line">        <span class="keyword">if</span>(p1-&gt;state==<span class="number">2</span>) PushReady(p1);</span><br><span class="line">        p1 = (pcb)<span class="built_in">malloc</span>(<span class="keyword">sizeof</span>(PCB));</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="type">void</span> <span class="title function_">Run</span><span class="params">()</span>&#123;</span><br><span class="line">    <span class="type">int</span> CupTime=<span class="number">0</span>;</span><br><span class="line">    RunPCB=ReadyQueue;</span><br><span class="line">    ReadyQueue=ReadyQueue-&gt;next;</span><br><span class="line">    ShowQueue(<span class="number">0</span>);</span><br><span class="line">    <span class="keyword">for</span>(;<span class="number">1</span>;CupTime++)&#123;</span><br><span class="line">        <span class="comment">//更新值</span></span><br><span class="line">        <span class="keyword">if</span>(RunPCB)&#123;</span><br><span class="line">            RunPCB-&gt;cpuTime++;</span><br><span class="line">            RunPCB-&gt;allTime--;</span><br><span class="line">            RunPCB-&gt;priority -= <span class="number">3</span>;<span class="comment">//优先数减3</span></span><br><span class="line">            <span class="keyword">if</span>(RunPCB-&gt;startBlock&gt;<span class="number">0</span>)</span><br><span class="line">                RunPCB-&gt;startBlock--;</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">        p1 = ReadyQueue;</span><br><span class="line">        <span class="keyword">while</span>(p1)&#123;<span class="comment">//优先数加1</span></span><br><span class="line">            p1-&gt;priority++;</span><br><span class="line">            p1 = p1-&gt;next;</span><br><span class="line">        &#125;</span><br><span class="line">        </span><br><span class="line">        <span class="keyword">if</span>(RunPCB)&#123;<span class="comment">//判断RunPCB的状态</span></span><br><span class="line">            <span class="keyword">if</span>(RunPCB-&gt;allTime==<span class="number">0</span>) &#123;</span><br><span class="line">                acclast-&gt;next = RunPCB;</span><br><span class="line">                acclast = RunPCB;</span><br><span class="line">                acclast-&gt;state = <span class="number">0</span>;</span><br><span class="line">                RunPCB = <span class="literal">NULL</span>;</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;<span class="comment">//判断RunPCB</span></span><br><span class="line">        </span><br><span class="line">        <span class="keyword">if</span>(RunPCB==<span class="literal">NULL</span>)&#123;<span class="comment">//更新RunPCB</span></span><br><span class="line">            RunPCB = ReadyQueue;</span><br><span class="line">            <span class="keyword">if</span>(ReadyQueue)  ReadyQueue = ReadyQueue-&gt;next;</span><br><span class="line">        &#125;<span class="keyword">else</span> <span class="keyword">if</span>(ReadyQueue &amp;&amp; RunPCB-&gt;priority &lt; ReadyQueue-&gt;priority)&#123;<span class="comment">//优先值小了</span></span><br><span class="line">            PushReady(RunPCB);</span><br><span class="line">            RunPCB = ReadyQueue;</span><br><span class="line">            ReadyQueue = ReadyQueue-&gt;next;</span><br><span class="line">        &#125;</span><br><span class="line">        </span><br><span class="line">        <span class="keyword">if</span>(RunPCB) RunPCB-&gt;state= <span class="number">1</span>;</span><br><span class="line">        ShowQueue(CupTime+<span class="number">1</span>);</span><br><span class="line">        <span class="keyword">if</span>(ReadyQueue==BlockQueue &amp;&amp; BlockQueue==RunPCB &amp;&amp; RunPCB==<span class="literal">NULL</span>) <span class="keyword">break</span>;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="type">void</span> <span class="title function_">PushReady</span><span class="params">(pcb p1)</span>&#123;<span class="comment">//以priority降序</span></span><br><span class="line">    p1-&gt;state = <span class="number">2</span>;</span><br><span class="line">    lastp = p2 = ReadyQueue;</span><br><span class="line">    <span class="keyword">while</span>(p2 &amp;&amp; p2-&gt;priority&gt;=p1-&gt;priority)</span><br><span class="line">    &#123;<span class="comment">//查找第一个比p1小的pcb</span></span><br><span class="line">        lastp = p2;</span><br><span class="line">        p2 = lastp-&gt;next;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">if</span>(lastp==p2)&#123;<span class="comment">//插到队头</span></span><br><span class="line">        p1-&gt;next = ReadyQueue;</span><br><span class="line">        ReadyQueue = p1;</span><br><span class="line">    &#125;<span class="keyword">else</span>&#123;<span class="comment">//插到队中</span></span><br><span class="line">        p1-&gt;next = p2;</span><br><span class="line">        lastp-&gt;next = p1;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="comment">//前插队列</span></span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="type">void</span> <span class="title function_">ShowQueue</span><span class="params">(<span class="type">int</span> cputime)</span>&#123;<span class="comment">//显示两个队列，和运行的程序</span></span><br><span class="line">    <span class="built_in">printf</span>(<span class="string">&quot;\n----------------------------------------------&quot;</span>);</span><br><span class="line">    <span class="built_in">printf</span>(<span class="string">&quot;----------------------------------------------\n&quot;</span>);</span><br><span class="line">    <span class="built_in">printf</span>(<span class="string">&quot;\t当前时间片：%d\n&quot;</span>, cputime);</span><br><span class="line">    <span class="built_in">printf</span>(<span class="string">&quot;\t%10s  %10s  %10s  %10s  %10s  %10s  %10s\n&quot;</span>,</span><br><span class="line">        <span class="string">&quot;ID&quot;</span>, <span class="string">&quot;priority&quot;</span>, <span class="string">&quot;cpuTime&quot;</span>, <span class="string">&quot;allTime&quot;</span>, <span class="string">&quot;startBlock&quot;</span>, <span class="string">&quot;blockTime&quot;</span>,<span class="string">&quot; state&quot;</span>);</span><br><span class="line">    <span class="built_in">printf</span>(<span class="string">&quot;正在运行程序：\n&quot;</span>);</span><br><span class="line">    p1 = RunPCB;</span><br><span class="line">    <span class="keyword">if</span>(RunPCB)</span><br><span class="line">        <span class="built_in">printf</span>(<span class="string">&quot;\t%10d  %10d  %10d  %10d  %10d  %10d  %10d\n&quot;</span>, </span><br><span class="line">            p1-&gt;ID, p1-&gt;priority, p1-&gt;cpuTime, p1-&gt;allTime, p1-&gt;startBlock, p1-&gt;blockTime, p1-&gt;state);</span><br><span class="line">    <span class="built_in">printf</span>(<span class="string">&quot;\n就绪队列：\n&quot;</span>);</span><br><span class="line">    p1 = ReadyQueue;</span><br><span class="line">    <span class="keyword">while</span>(p1)&#123;<span class="comment">//优先数加1</span></span><br><span class="line">        <span class="built_in">printf</span>(<span class="string">&quot;\t%10d  %10d  %10d  %10d  %10d  %10d  %10d\n&quot;</span>, </span><br><span class="line">            p1-&gt;ID, p1-&gt;priority, p1-&gt;cpuTime, p1-&gt;allTime, p1-&gt;startBlock, p1-&gt;blockTime, p1-&gt;state);</span><br><span class="line">        p1 = p1-&gt;next;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="built_in">printf</span>(<span class="string">&quot;\n阻塞队列：\n&quot;</span>);</span><br><span class="line">    p1=BlockQueue;</span><br><span class="line">    <span class="keyword">while</span>(p1)&#123;<span class="comment">//阻塞时间-1</span></span><br><span class="line">        <span class="built_in">printf</span>(<span class="string">&quot;\t%10d  %10d  %10d  %10d  %10d  %10d  %10d\n&quot;</span>, </span><br><span class="line">            p1-&gt;ID, p1-&gt;priority, p1-&gt;cpuTime, p1-&gt;allTime, p1-&gt;startBlock, p1-&gt;blockTime, p1-&gt;state);</span><br><span class="line">        p1 = p1-&gt;next;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="built_in">printf</span>(<span class="string">&quot;\n完成队列：\n&quot;</span>);</span><br><span class="line">    p1 = accQueue;</span><br><span class="line">    <span class="keyword">while</span> (<span class="number">1</span>)&#123;</span><br><span class="line">        p1 = p1-&gt;next;</span><br><span class="line">        <span class="keyword">if</span>(p1) <span class="built_in">printf</span>(<span class="string">&quot;\t%10d  %10d  %10d  %10d  %10d  %10d  %10d\n&quot;</span>, </span><br><span class="line">            p1-&gt;ID, p1-&gt;priority, p1-&gt;cpuTime, p1-&gt;allTime, p1-&gt;startBlock, p1-&gt;blockTime, p1-&gt;state);</span><br><span class="line">        <span class="keyword">if</span>(p1==<span class="literal">NULL</span>||p1==acclast) <span class="keyword">break</span>;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br></pre>
+
+<p>运行截图</p>
+<p><img src="https://img-blog.csdnimg.cn/1dec06e81f224676af3e2b2140f5dd2f.png?x-oss-process=image/watermark,type_ZHJvaWRzYW5zZmFsbGJhY2s,shadow_50,text_Q1NETiBA56uv5pyo54i1,size_20,color_FFFFFF,t_70,g_se,x_16" alt="在这里插入图片描述" srcset="data:image/svg+xml,%3Csvg%20xmlns='http://www.w3.org/2000/svg'%20viewBox='0%200%20300%20300'%3E%3C/svg%3E" data-src="https://img-blog.csdnimg.cn/1dec06e81f224676af3e2b2140f5dd2f.png?x-oss-process=image/watermark,type_ZHJvaWRzYW5zZmFsbGJhY2s,shadow_50,text_Q1NETiBA56uv5pyo54i1,size_20,color_FFFFFF,t_70,g_se,x_16" class="lozad post-image"></p>
+
+  </div>
+  <div>
+    
+      <div 
+        class="post-note note-warning copyright" 
+        style="margin-top: 42px">
+        <p>
+          <span style="font-weight: bold;">作者：</span><a 
+            target="_blank" 
+            rel="nofollow noopener noreferrer" 
+            href="/about">
+            shensaijie
+          </a>
+        </p>
+        <p>
+          <span style="font-weight: bold;">文章链接：</span><a 
+            target="_blank" 
+            rel="nofollow noopener noreferrer" 
+            href="http://shensaijie.github.io/2021/11/14/C%E8%AF%AD%E8%A8%80%E5%AE%9E%E7%8E%B0%E5%8A%A8%E6%80%81%E4%BC%98%E5%85%88%E6%9D%83%E7%AE%97%E6%B3%95%E8%B0%83%E5%BA%A6%E6%A8%A1%E6%8B%9F/">
+            http://shensaijie.github.io/2021/11/14/C%E8%AF%AD%E8%A8%80%E5%AE%9E%E7%8E%B0%E5%8A%A8%E6%80%81%E4%BC%98%E5%85%88%E6%9D%83%E7%AE%97%E6%B3%95%E8%B0%83%E5%BA%A6%E6%A8%A1%E6%8B%9F/
+          </a>
+        </p>
+        <p><span style="font-weight: bold;">版权声明：</span>本博客所有文章除特别声明外，均采用<a target="_blank" rel="noopener" href="https://creativecommons.org/licenses/by-nc-sa/4.0/deed.zh">CC BY-NC-SA 4.0 协议</a>。转载请注明出处！</p>
+      </div>
+    
+  </div>
+</article>
+<div class="nav">
+  
+    <div class="nav-item-prev">
+      <a 
+        href="/2021/11/16/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F%E2%80%94%E2%80%94%E9%93%B6%E8%A1%8C%E5%AE%B6%E7%AE%97%E6%B3%95%E7%9A%84%E6%A8%A1%E6%8B%9F%E5%AE%9E%E7%8E%B0/" 
+        class="nav-link">
+        <i class="iconfont icon-left nav-prev-icon"></i>
+        <div>
+          <div class="nav-label">上一篇</div>
+          
+            <div class="nav-title">操作系统银行家算法 </div>
+          
+        </div>
+      </a>
+    </div>
+  
+  
+    <div class="nav-item-next">
+      <a 
+        href="/2021/08/11/C%E5%92%8CC++%E6%B8%B8%E6%88%8F%E8%B6%A3%E5%91%B3%E7%BC%96%E7%A8%8B%EF%BC%88%E4%BA%8C%EF%BC%89Easyx%E5%9B%BE%E5%BD%A2%E5%BA%93%E5%85%A5%E9%97%A8%E4%B8%8E%E8%B4%AA%E5%90%83%E8%9B%87/" 
+        class="nav-link">
+        <div>
+          <div class="nav-label">下一篇</div>
+          
+            <div class="nav-title">c/c++游戏编程贪吃蛇 </div>
+          
+        </div>
+        <i class="iconfont icon-right nav-next-icon"></i>
+      </a>
+    </div>
+  
+</div>
+
+<div 
+  class="card card-content toc-card" 
+  id="mobiletoc">
+  <div class="toc-header">
+  <i 
+    class="iconfont icon-menu" 
+    style="padding-right: 2px;">
+  </i>目录
+</div>
+<ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E4%B8%80%EF%B9%91%E5%AE%9E%E9%AA%8C%E7%9B%AE%E7%9A%84"><span class="toc-text">一﹑实验目的</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E4%BA%8C%EF%B9%91%E5%AE%9E%E9%AA%8C%E5%86%85%E5%AE%B9%E4%B8%8E%E5%9F%BA%E6%9C%AC%E8%A6%81%E6%B1%82"><span class="toc-text">二﹑实验内容与基本要求</span></a></li></ol>
+</div></main>
+            <aside class="left-column">
+              
+              <div class="card card-author">
+                
+  <img 
+    src="/img/avatar.jpg" 
+    class="author-img"
+    width="88"
+    height="88"
+    alt="author avatar"
+    style="border-radius: 50%; overflow: hidden;">
+
+<p class="author-name">shensj</p>
+<p class="author-description">人不能两次踩到同一个坑里。</p>
+<div class="author-message">
+  <a 
+    class="author-posts-count" 
+    href="/archives">
+    <span>15</span>
+    <span>文章</span>
+  </a>
+  <a 
+    class="author-categories-count" 
+    href="/categories">
+    <span>5</span>
+    <span>分类</span>
+  </a>
+  <a 
+    class="author-tags-count" 
+    href="/tags">
+    <span>22</span>
+    <span>标签</span>
+  </a>
+</div>
+
+  <div class="author-card-society">
+    
+      <div class="author-card-society-icon">
+        <a target="_blank" rel="noopener" href="https://blog.csdn.net/aaalalula">
+          <i class="iconfont icon-bilibili society-icon"></i>
+        </a>
+      </div>
+    
+      <div class="author-card-society-icon">
+        <a target="_blank" rel="noopener" href="https://github/shensaijie">
+          <i class="iconfont icon-github society-icon"></i>
+        </a>
+      </div>
+    
+      <div class="author-card-society-icon">
+        <a target="_blank" rel="noopener" href="https://www.google.cn/chrome">
+          <i class="iconfont icon-chrome society-icon"></i>
+        </a>
+      </div>
+    
+  </div>
+
+              </div>
+               <div class="sticky-tablet">
+  
+  
+    <article class="display-when-two-columns spacer">
+      <div class="card card-content toc-card">
+        <div class="toc-header">
+  <i 
+    class="iconfont icon-menu" 
+    style="padding-right: 2px;">
+  </i>目录
+</div>
+<ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E4%B8%80%EF%B9%91%E5%AE%9E%E9%AA%8C%E7%9B%AE%E7%9A%84"><span class="toc-text">一﹑实验目的</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E4%BA%8C%EF%B9%91%E5%AE%9E%E9%AA%8C%E5%86%85%E5%AE%B9%E4%B8%8E%E5%9F%BA%E6%9C%AC%E8%A6%81%E6%B1%82"><span class="toc-text">二﹑实验内容与基本要求</span></a></li></ol>
+      </div>
+    </article>
+  
+  
+  <article class="card card-content categories-widget">
+    <div class="categories-card">
+  <div class="categories-header">
+    <i 
+      class="iconfont icon-fenlei" 
+      style="padding-right: 2px;">
+    </i>分类
+  </div>
+  <div class="categories-list">
+    
+      <a href="/categories/%E7%AE%97%E6%B3%95%E7%AB%9E%E8%B5%9B/">
+        <div class="categories-list-item">
+          算法竞赛
+          <span class="categories-list-item-badge">4</span>
+        </div>
+      </a>
+    
+      <a href="/categories/c-c/">
+        <div class="categories-list-item">
+          c-c
+          <span class="categories-list-item-badge">3</span>
+        </div>
+      </a>
+    
+      <a href="/categories/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F/">
+        <div class="categories-list-item">
+          操作系统
+          <span class="categories-list-item-badge">3</span>
+        </div>
+      </a>
+    
+      <a href="/categories/%E5%B5%8C%E5%85%A5%E5%BC%8F/">
+        <div class="categories-list-item">
+          嵌入式
+          <span class="categories-list-item-badge">2</span>
+        </div>
+      </a>
+    
+      <a href="/categories/python/">
+        <div class="categories-list-item">
+          python
+          <span class="categories-list-item-badge">3</span>
+        </div>
+      </a>
+    
+  </div>
+</div>
+  </article>
+  
+  <article class="card card-content tags-widget">
+    <div class="tags-card">
+  <div class="tags-header">
+    <i 
+      class="iconfont icon-biaoqian" 
+      style="padding-right: 2px;">
+    </i>热门标签
+  </div>
+  <div class="tags-list">
+    
+      <a 
+        href="/tags/c-c/" 
+        title="c/c++">
+        <div class="tags-list-item">c/c++</div>
+      </a>
+    
+      <a 
+        href="/tags/%E7%88%AC%E8%99%AB/" 
+        title="爬虫">
+        <div class="tags-list-item">爬虫</div>
+      </a>
+    
+      <a 
+        href="/tags/python/" 
+        title="python">
+        <div class="tags-list-item">python</div>
+      </a>
+    
+      <a 
+        href="/tags/%E6%B8%B8%E6%88%8F/" 
+        title="游戏">
+        <div class="tags-list-item">游戏</div>
+      </a>
+    
+      <a 
+        href="/tags/%E7%AE%97%E6%B3%95/" 
+        title="算法">
+        <div class="tags-list-item">算法</div>
+      </a>
+    
+      <a 
+        href="/tags/%E5%B5%8C%E5%85%A5%E5%BC%8F/" 
+        title="嵌入式">
+        <div class="tags-list-item">嵌入式</div>
+      </a>
+    
+      <a 
+        href="/tags/%E8%93%9D%E6%A1%A5%E6%9D%AF/" 
+        title="蓝桥杯">
+        <div class="tags-list-item">蓝桥杯</div>
+      </a>
+    
+      <a 
+        href="/tags/CLOCK/" 
+        title="CLOCK">
+        <div class="tags-list-item">CLOCK</div>
+      </a>
+    
+      <a 
+        href="/tags/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F%EF%BC%8CLRU/" 
+        title="操作系统，LRU">
+        <div class="tags-list-item">操作系统，LRU</div>
+      </a>
+    
+      <a 
+        href="/tags/RTC/" 
+        title="RTC">
+        <div class="tags-list-item">RTC</div>
+      </a>
+    
+      <a 
+        href="/tags/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F%EF%BC%8C%E9%93%B6%E8%A1%8C%E5%AE%B6%E7%AE%97%E6%B3%95/" 
+        title="操作系统，银行家算法">
+        <div class="tags-list-item">操作系统，银行家算法</div>
+      </a>
+    
+      <a 
+        href="/tags/%E6%AD%A3%E5%88%99%E8%A1%A8%E8%BE%BE%E5%BC%8F/" 
+        title="正则表达式">
+        <div class="tags-list-item">正则表达式</div>
+      </a>
+    
+      <a 
+        href="/tags/web%E6%89%93%E5%BC%80%E6%96%B9%E5%BC%8F/" 
+        title="web打开方式">
+        <div class="tags-list-item">web打开方式</div>
+      </a>
+    
+      <a 
+        href="/tags/python%E8%AF%AD%E6%B3%95/" 
+        title="python语法">
+        <div class="tags-list-item">python语法</div>
+      </a>
+    
+      <a 
+        href="/tags/%E6%8E%A5%E5%8F%A3/" 
+        title="接口">
+        <div class="tags-list-item">接口</div>
+      </a>
+    
+      <a 
+        href="/tags/%E8%AE%BE%E5%A4%87%E9%A9%B1%E5%8A%A8/" 
+        title="设备驱动">
+        <div class="tags-list-item">设备驱动</div>
+      </a>
+    
+  </div>
+</div>
+  </article>
+  
+  
+</div>
+            </aside>
+            <aside class="right-column">
+              <div class="sticky-widescreen">
+  
+  
+    <article class="card card-content toc-card">
+      <div class="toc-header">
+  <i 
+    class="iconfont icon-menu" 
+    style="padding-right: 2px;">
+  </i>目录
+</div>
+<ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E4%B8%80%EF%B9%91%E5%AE%9E%E9%AA%8C%E7%9B%AE%E7%9A%84"><span class="toc-text">一﹑实验目的</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E4%BA%8C%EF%B9%91%E5%AE%9E%E9%AA%8C%E5%86%85%E5%AE%B9%E4%B8%8E%E5%9F%BA%E6%9C%AC%E8%A6%81%E6%B1%82"><span class="toc-text">二﹑实验内容与基本要求</span></a></li></ol>
+    </article>
+  
+  
+  <article class="card card-content">
+    <div class="recent-posts-card">
+  <div class="recent-posts-header">
+    <i 
+      class="iconfont icon-wenzhang_huaban" 
+      style="padding-right: 2px;">
+    </i>最近文章
+  </div>
+  <div class="recent-posts-list">
+    
+      <div class="recent-posts-item">
+        <div class="recent-posts-item-title">2022-04-13</div>
+        <a href="/2022/04/13/%E8%B8%A9%E8%BF%87%E7%9A%84c_c++%E7%9A%84%E5%9D%91/"><div class="recent-posts-item-content">那些踩过c/c++的坑</div></a>
+      </div>
+    
+      <div class="recent-posts-item">
+        <div class="recent-posts-item-title">2022-04-13</div>
+        <a href="/2022/04/13/%E5%8D%81%E4%B8%89%E5%B1%8A%E8%93%9D%E6%A1%A5%E6%9D%AFc_c++B%E7%BB%84%E8%AF%95%E9%A2%98/"><div class="recent-posts-item-content">2022年第十三届蓝桥杯省赛B组C/C++总结</div></a>
+      </div>
+    
+      <div class="recent-posts-item">
+        <div class="recent-posts-item-title">2021-12-02</div>
+        <a href="/2021/12/02/HBCPC2021%E7%9C%81%E8%B5%9B%E2%80%94%E2%80%94Problem%20H.%20%E4%BF%A1%20%E5%8F%B7%20%E4%BC%A0%20%E8%BE%93/"><div class="recent-posts-item-content">HBCPC河北省赛</div></a>
+      </div>
+    
+      <div class="recent-posts-item">
+        <div class="recent-posts-item-title">2021-11-26</div>
+        <a href="/2021/11/26/%E8%AF%B7%E6%B1%82%E9%A1%B5%E5%BC%8F%E5%AD%98%E5%82%A8%E7%AE%A1%E7%90%86%E5%9F%BA%E6%9C%AC%E7%BD%AE%E6%8D%A2%E7%AE%97%E6%B3%95LRU%E4%B8%8ECLOCK/"><div class="recent-posts-item-content">操作系统页面置换算法</div></a>
+      </div>
+    
+  </div>
+</div>
+  </article>
+  
+  
+</div>
+            </aside>
+          </div>
+        </div>
+      </div>
+    </div>
+     
+    <footer class="footer">
+  <div class="footer-container">
+    <div>
+      <div class="footer-dsc">
+        <span>
+          Copyright ©
+          
+            2020
+          
+          
+                - 
+                2022
+          
+        </span>
+        &nbsp;
+        <a 
+          href="/" 
+          class="footer-link">
+          shensj's blog
+        </a>
+      </div>
+    </div>
+
+    
+    
+    
+    
+</footer>
+ 
+    
+  <a 
+    role="button" 
+    id="scrollbutton" 
+    class="basebutton" 
+    aria-label="回到顶部">
+    <i class="iconfont icon-arrowleft button-icon"></i>
+  </a>
+
+<a 
+  role="button" 
+  id="menubutton"
+  aria-label="menu button"
+  class="basebutton">
+  <i class="iconfont icon-menu button-icon"></i>
+</a>
+<a 
+  role="button" 
+  id="popbutton" 
+  class="basebutton" 
+  aria-label="控制中心">
+  <i class="iconfont icon-expand button-icon"></i>
+</a>
+<a 
+  role="button" 
+  id="darkbutton" 
+  class="basebutton darkwidget" 
+  aria-label="夜色模式">
+  <i class="iconfont icon-weather button-icon"></i>
+</a>
+<a 
+  role="button" 
+  id="searchbutton" 
+  class="basebutton searchwidget" 
+  aria-label="搜索">
+  <i class="iconfont icon-search button-icon"></i>
+</a> 
+     
+     
+     
+      <script>
+  var addImgLayout = function () {
+    var img = document.querySelectorAll('.post-content img')
+    var i
+    for (i = 0; i < img.length; i++) {
+      var wrapper = document.createElement('a')
+      wrapper.setAttribute('href', img[i].getAttribute('data-src'))
+      wrapper.setAttribute('aria-label', 'illustration')
+      wrapper.style.cssText =
+        'width: 100%; display: flex; justify-content: center;'
+      if (img[i].alt) wrapper.dataset.caption = img[i].alt
+      wrapper.dataset.nolink = true
+      img[i].before(wrapper)
+      wrapper.append(img[i])
+      var divWrap = document.createElement('div')
+      divWrap.classList.add('gallery')
+      wrapper.before(divWrap)
+      divWrap.append(wrapper)
+    }
+    baguetteBox.run('.gallery')
+  }
+</script>
+<script>
+  loadScript(
+    "/js/lib/lightbox/baguetteBox.min.js",
+    addImgLayout
+  )
+</script>
+ 
+     
+     
+    <script src="/js/main.js"></script> 
+     
+    
+      <script>
+        var addLazyload = function () {
+          var observer = lozad('.lozad', {
+            load: function (el) {
+              el.srcset = el.getAttribute('data-src')
+            },
+            loaded: function (el) {
+              el.classList.add('loaded')
+            },
+          })
+          observer.observe()
+        }
+      </script>
+      <script>
+        loadScript('/js/lib/lozad.min.js', addLazyload)
+      </script>
+     
+    
+    
+  </body>
+</html>

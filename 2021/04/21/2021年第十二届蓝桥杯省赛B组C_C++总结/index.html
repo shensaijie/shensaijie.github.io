@@ -1,0 +1,865 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+  <head>
+  <meta charset="UTF-8">
+  <meta 
+    name="viewport"
+    content="width=device-width, initial-scale=1.0, minimum-scale=1.0">
+  <meta 
+    http-equiv="X-UA-Compatible" 
+    content="ie=edge">
+  <meta 
+    name="theme-color" 
+    content="#fff" 
+    id="theme-color">
+  <meta 
+    name="description" 
+    content="shensaijie">
+  <link 
+    rel="icon" 
+    href="/img/ss.png">
+  <title>2021年第十二届蓝桥杯省赛B组C/C++总结</title>
+  
+    
+      <meta 
+        property="og:title" 
+        content="2021年第十二届蓝桥杯省赛B组C/C++总结">
+    
+    
+      <meta 
+        property="og:url" 
+        content="http://shensaijie.github.io/2021/04/21/2021%E5%B9%B4%E7%AC%AC%E5%8D%81%E4%BA%8C%E5%B1%8A%E8%93%9D%E6%A1%A5%E6%9D%AF%E7%9C%81%E8%B5%9BB%E7%BB%84C_C++%E6%80%BB%E7%BB%93/index.html">
+    
+    
+      <meta 
+        property="og:img" 
+        content="/img/avatar.jpg">
+    
+    
+    
+      <meta 
+        property="og:type" 
+        content="article">
+      <meta 
+        property="og:article:published_time" 
+        content="2021-04-21">
+      <meta 
+        property="og:article:modified_time" 
+        content="2022-04-14">
+      <meta 
+        property="og:article:author" 
+        content="shensj">
+      
+        
+          <meta 
+            property="og:article:tag" 
+            content="c/c++">
+        
+          <meta 
+            property="og:article:tag" 
+            content="算法">
+        
+          <meta 
+            property="og:article:tag" 
+            content="蓝桥杯">
+        
+      
+    
+  
+  <script>
+    function loadScript(url, cb) {
+      var script = document.createElement('script');
+      script.src = url;
+      if (cb) script.onload = cb;
+      script.async = true;
+      document.body.appendChild(script);
+    }
+    function loadCSS(href, data, attr) {
+      var sheet = document.createElement('link');
+      sheet.ref = 'stylesheet';
+      sheet.href = href;
+      sheet.dataset[data] = attr;
+      document.head.appendChild(sheet);
+    }
+    function changeCSS(cssFile, data, attr) {
+      var oldlink = document.querySelector(data);
+      var newlink = document.createElement("link");
+      newlink.setAttribute("rel", "stylesheet");
+      newlink.setAttribute("href", cssFile);
+      newlink.dataset.prism = attr;
+      document.head.replaceChild(newlink, oldlink);
+    }
+  </script>
+  
+    
+  
+  <script>
+    // control reverse button
+    var reverseDarkList = {
+      dark: 'light',
+      light: 'dark'
+    };
+    var themeColor = {
+      dark: '#1c1c1e',
+      light: '#fff'
+    }
+    // get the data of css prefers-color-scheme
+    var getCssMediaQuery = function() {
+      return window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light';
+    };
+    // reverse current darkmode setting function
+    var reverseDarkModeSetting = function() {
+      var setting = localStorage.getItem('user-color-scheme');
+      if(reverseDarkList[setting]) {
+        setting = reverseDarkList[setting];
+      } else if(setting === null) {
+        setting = reverseDarkList[getCssMediaQuery()];
+      } else {
+        return;
+      }
+      localStorage.setItem('user-color-scheme', setting);
+      return setting;
+    };
+    // apply current darkmode setting
+  </script>
+  
+    <script>
+      var setDarkmode = function(mode) {
+      var setting = mode || localStorage.getItem('user-color-scheme');
+      if(setting === getCssMediaQuery()) {
+        document.documentElement.removeAttribute('data-user-color-scheme');
+        localStorage.removeItem('user-color-scheme');
+        document.getElementById('theme-color').content = themeColor[setting];
+        document.getElementById('theme-color').dataset.mode = setting;
+      } else if(reverseDarkList[setting]) {
+        document.documentElement.setAttribute('data-user-color-scheme', setting);
+        document.getElementById('theme-color').content = themeColor[setting];
+        document.getElementById('theme-color').dataset.mode = setting;
+      } else {
+        document.documentElement.removeAttribute('data-user-color-scheme');
+        localStorage.removeItem('user-color-scheme');
+        document.getElementById('theme-color').content = themeColor[getCssMediaQuery()];
+        document.getElementById('theme-color').dataset.mode = getCssMediaQuery();
+      }
+    };
+    setDarkmode();
+    </script>
+  
+  
+  <link rel="preload" href="//at.alicdn.com/t/font_1946621_i1kgafibvw.css" as="style" >
+  <link rel="preload" href="//at.alicdn.com/t/font_1952792_89b4ac4k4up.css" as="style" >
+  
+  
+    <link rel="preload" href="/js/lib/lightbox/baguetteBox.min.js" as="script">
+    <link rel="preload" href="/js/lib/lightbox/baguetteBox.min.css" as="style" >
+  
+  
+    <link rel="preload" href="/js/lib/lozad.min.js" as="script">
+  
+  
+  
+  
+  
+  
+  
+  <link rel="stylesheet" href="/css/main.css">
+  
+  <link rel="stylesheet" href="//at.alicdn.com/t/font_1946621_i1kgafibvw.css">
+  
+  <link rel="stylesheet" href="//at.alicdn.com/t/font_1952792_89b4ac4k4up.css">
+  
+    <link rel="stylesheet" href="/js/lib/lightbox/baguetteBox.min.css">
+  
+<meta name="generator" content="Hexo 5.4.2"></head>
+
+  <body>
+    <div class="wrapper">
+       
+      <nav class="navbar">
+  <div class="navbar-logo">
+    <span class="navbar-logo-main">
+      
+        <img 
+          class="navbar-logo-img"
+          width="32"
+          height="32"
+          src="/img/ss.png" 
+          alt="blog logo">
+      
+      <span class="navbar-logo-dsc">shensj's blog</span>
+    </span>
+  </div>
+  <div class="navbar-menu">
+    
+      <a 
+        href="/" 
+        class="navbar-menu-item">
+        
+          首页
+        
+      </a>
+    
+      <a 
+        href="/archives" 
+        class="navbar-menu-item">
+        
+          归档
+        
+      </a>
+    
+      <a 
+        href="/tags" 
+        class="navbar-menu-item">
+        
+          标签
+        
+      </a>
+    
+      <a 
+        href="/categories" 
+        class="navbar-menu-item">
+        
+          分类
+        
+      </a>
+    
+      <a 
+        href="/about" 
+        class="navbar-menu-item">
+        
+          关于
+        
+      </a>
+    
+      <a 
+        href="/links" 
+        class="navbar-menu-item">
+        
+          友链
+        
+      </a>
+    
+    <a 
+      class="navbar-menu-item darknavbar" 
+      id="dark">
+      <i class="iconfont icon-weather"></i>
+    </a>
+    <a 
+      class="navbar-menu-item searchnavbar" 
+      id="search">
+      <i 
+        class="iconfont icon-search" 
+        style="font-size: 1.2rem; font-weight: 400;">
+      </i>
+    </a>
+  </div>
+</nav> 
+      
+      <div 
+        id="local-search" 
+        style="display: none">
+        <input
+          class="navbar-menu-item"
+          id="search-input"
+          placeholder="请输入搜索内容..." />
+        <div id="search-content"></div>
+      </div>
+      
+      <div class="section-wrap">
+        <div class="container">
+          <div class="columns">
+            <main class="main-column">
+<article class="card card-content">
+  <header>
+    <h1 class="post-title">
+      2021年第十二届蓝桥杯省赛B组C/C++总结
+    </h1>
+  </header>
+  <div class="post-meta post-show-meta">
+    <time datetime="2021-04-21T00:07:55.000Z">
+      <i 
+        class="iconfont icon-calendar" 
+        style="margin-right: 2px;">
+      </i>
+      <span>2021-04-21</span>
+    </time>
+    
+      <span class="dot"></span>
+      
+        <a 
+          href="/categories/%E7%AE%97%E6%B3%95%E7%AB%9E%E8%B5%9B/" 
+          class="post-meta-link">
+          算法竞赛
+        </a>
+      
+    
+    
+      <span class="dot"></span>
+      <span>2.1k 字</span>
+    
+  </div>
+  
+    <div 
+      class="post-meta post-show-meta" 
+      style="margin-top: -10px;">
+      <div style="display: flex; align-items: center;">
+        <i 
+          class="iconfont icon-biaoqian" 
+          style="margin-right: 2px; font-size: 1.15rem;">
+        </i>
+        
+          
+          <a 
+            href="/tags/c-c/" 
+            class="post-meta-link">
+            c/c++
+          </a>
+        
+          
+            <span class="dot"></span>
+          
+          <a 
+            href="/tags/%E7%AE%97%E6%B3%95/" 
+            class="post-meta-link">
+            算法
+          </a>
+        
+          
+            <span class="dot"></span>
+          
+          <a 
+            href="/tags/%E8%93%9D%E6%A1%A5%E6%9D%AF/" 
+            class="post-meta-link">
+            蓝桥杯
+          </a>
+        
+      </div>
+    </div>
+  
+  </header>
+  <div 
+    id="section" 
+    class="post-content">
+    <h1 id="2021年第十二届蓝桥杯省赛B组C-C-总结"><a href="#2021年第十二届蓝桥杯省赛B组C-C-总结" class="headerlink" title="2021年第十二届蓝桥杯省赛B组C/C++总结"></a>2021年第十二届蓝桥杯省赛B组C/C++总结</h1><h2 id="问题及处理方法"><a href="#问题及处理方法" class="headerlink" title="问题及处理方法"></a>问题及处理方法</h2><h3 id="题A："><a href="#题A：" class="headerlink" title="题A："></a>题A：</h3><p><img  srcset="data:image/svg+xml,%3Csvg%20xmlns='http://www.w3.org/2000/svg'%20viewBox='0%200%20300%20300'%3E%3C/svg%3E" data-src="https://img-blog.csdnimg.cn/20210420130100220.jfif?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L2FhYWxhbHVsYQ==,size_16,color_FFFFFF,t_70" class="lozad post-image"src="https://img-blog.csdnimg.cn/20210420130100220.jfif?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L2FhYWxhbHVsYQ==,size_16,color_FFFFFF,t_70"><br>答案就是256乘 2^10 乘 2^10 乘8除以 2^5<br>答案：67108864</p>
+<h3 id="题B："><a href="#题B：" class="headerlink" title="题B："></a>题B：</h3><p><img src="https://img-blog.csdnimg.cn/20210420130512934.jpg?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L2FhYWxhbHVsYQ==,size_16,color_FFFFFF,t_70" alt="在这里插入图片描述" srcset="data:image/svg+xml,%3Csvg%20xmlns='http://www.w3.org/2000/svg'%20viewBox='0%200%20300%20300'%3E%3C/svg%3E" data-src="https://img-blog.csdnimg.cn/20210420130512934.jpg?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L2FhYWxhbHVsYQ==,size_16,color_FFFFFF,t_70" class="lozad post-image"></p>
+<pre class="highlight"><span class="line"><span class="meta">#<span class="keyword">include</span><span class="string">&lt;iostream&gt;</span></span></span><br><span class="line"><span class="keyword">using</span> <span class="keyword">namespace</span> std;</span><br><span class="line"><span class="function"><span class="type">int</span> <span class="title">main</span><span class="params">()</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    <span class="type">int</span> sum[<span class="number">10</span>];</span><br><span class="line">    <span class="keyword">for</span>(<span class="type">int</span> i=<span class="number">0</span>;i&lt;=<span class="number">9</span>;i++)&#123;sum[i]=<span class="number">2021</span>;&#125;</span><br><span class="line">    <span class="type">int</span> i;</span><br><span class="line">    <span class="keyword">for</span>(i=<span class="number">1</span>;i&lt;=<span class="number">20210</span>;i++)</span><br><span class="line">    &#123;</span><br><span class="line">        <span class="type">int</span> t=i,flag=<span class="number">0</span>;</span><br><span class="line">        <span class="keyword">while</span>(t)</span><br><span class="line">        &#123;</span><br><span class="line">            sum[t%<span class="number">10</span>]--;</span><br><span class="line">            <span class="keyword">if</span>(sum[t%<span class="number">10</span>]==<span class="number">-1</span>)&#123;</span><br><span class="line">                flag=<span class="number">1</span>;</span><br><span class="line">                <span class="keyword">break</span>;</span><br><span class="line">            &#125;</span><br><span class="line">            t=t/<span class="number">10</span>;</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">if</span>(flag) <span class="keyword">break</span>;</span><br><span class="line">    &#125;</span><br><span class="line">    cout&lt;&lt;i<span class="number">-1</span>;</span><br><span class="line">    <span class="built_in">system</span>(<span class="string">&quot;pause&quot;</span>);</span><br><span class="line">    <span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">&#125;</span><br></pre>
+<p>答案：3181</p>
+<h3 id="试题C"><a href="#试题C" class="headerlink" title="试题C"></a>试题C</h3><p><img src="https://img-blog.csdnimg.cn/20210420131831918.jpg?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L2FhYWxhbHVsYQ==,size_16,color_FFFFFF,t_70" alt="在这里插入图片描述" srcset="data:image/svg+xml,%3Csvg%20xmlns='http://www.w3.org/2000/svg'%20viewBox='0%200%20300%20300'%3E%3C/svg%3E" data-src="https://img-blog.csdnimg.cn/20210420131831918.jpg?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L2FhYWxhbHVsYQ==,size_16,color_FFFFFF,t_70" class="lozad post-image"></p>
+<pre class="highlight"><span class="line"><span class="meta">#<span class="keyword">include</span><span class="string">&lt;iostream&gt;</span></span></span><br><span class="line"><span class="keyword">using</span> <span class="keyword">namespace</span> std;</span><br><span class="line"><span class="type">int</span> A[<span class="number">50000</span>],B[<span class="number">50000</span>],C[<span class="number">50000</span>];</span><br><span class="line"><span class="function"><span class="type">bool</span> <span class="title">kx</span><span class="params">(<span class="type">int</span> x,<span class="type">int</span> y,<span class="type">int</span> i)</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    <span class="keyword">if</span>(y*B[i]==A[i]*x+C[i])</span><br><span class="line">        <span class="keyword">return</span> <span class="number">1</span>;</span><br><span class="line">    <span class="keyword">else</span></span><br><span class="line">        <span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">&#125;</span><br><span class="line"><span class="function"><span class="type">int</span> <span class="title">main</span><span class="params">()</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    <span class="type">int</span> i, j, sum;</span><br><span class="line">    sum = <span class="number">0</span>;</span><br><span class="line">    <span class="keyword">for</span>(i=<span class="number">0</span>;i&lt;=<span class="number">19</span>;i++)</span><br><span class="line">        <span class="keyword">for</span>(j=<span class="number">0</span>;j&lt;=<span class="number">20</span>;j++)</span><br><span class="line">        &#123;</span><br><span class="line">            <span class="type">int</span> m,n;</span><br><span class="line">            <span class="keyword">for</span>(m=i+<span class="number">1</span>;m&lt;=<span class="number">19</span>;m++)</span><br><span class="line">                <span class="keyword">for</span>(n=<span class="number">0</span>;n&lt;=<span class="number">20</span>;n++)</span><br><span class="line">                &#123;</span><br><span class="line">                    <span class="type">int</span> k;</span><br><span class="line">                    <span class="keyword">for</span> (k = <span class="number">0</span>; k &lt; sum;k++)</span><br><span class="line">                    &#123;</span><br><span class="line">                        <span class="keyword">if</span>(<span class="built_in">kx</span>(i,j,k)&amp;&amp;<span class="built_in">kx</span>(m,n,k))</span><br><span class="line">                            <span class="keyword">break</span>;</span><br><span class="line">                    &#125;</span><br><span class="line">                    <span class="keyword">if</span>(k==sum)&#123;</span><br><span class="line">                        A[sum] = n - j;</span><br><span class="line">                        B[sum] = m - i;</span><br><span class="line">                        C[sum] = i * (j - n) + j * (m - i);</span><br><span class="line">                        sum++;</span><br><span class="line">                    &#125;</span><br><span class="line">                &#125;</span><br><span class="line">        &#125;</span><br><span class="line">    cout &lt;&lt; sum;</span><br><span class="line">    <span class="built_in">system</span>(<span class="string">&quot;pause&quot;</span>);</span><br><span class="line">    <span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">&#125;</span><br></pre>
+<p>用的两点式求出来后加上垂直x轴的20条线<br>答案：40257</p>
+<h3 id="试题D"><a href="#试题D" class="headerlink" title="试题D"></a>试题D</h3><p><img src="https://img-blog.csdnimg.cn/20210420210756131.jpg?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L2FhYWxhbHVsYQ==,size_16,color_FFFFFF,t_70" alt="在这里插入图片描述" srcset="data:image/svg+xml,%3Csvg%20xmlns='http://www.w3.org/2000/svg'%20viewBox='0%200%20300%20300'%3E%3C/svg%3E" data-src="https://img-blog.csdnimg.cn/20210420210756131.jpg?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L2FhYWxhbHVsYQ==,size_16,color_FFFFFF,t_70" class="lozad post-image"></p>
+<pre class="highlight"><span class="line"><span class="meta">#<span class="keyword">include</span><span class="string">&lt;bits/stdc++.h&gt;</span></span></span><br><span class="line"><span class="keyword">using</span> <span class="keyword">namespace</span> std;</span><br><span class="line"><span class="type">long</span> <span class="type">long</span> n = <span class="number">2021041820210418</span>, t, ans, i, j, l;</span><br><span class="line"><span class="type">int</span> m,k;</span><br><span class="line"><span class="function"><span class="type">int</span> <span class="title">main</span><span class="params">()</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    ans = <span class="number">0</span>;</span><br><span class="line">    m = <span class="built_in">pow</span>(n,<span class="number">1.0</span>/<span class="number">3</span>);</span><br><span class="line">    k = <span class="built_in">sqrt</span>(n);</span><br><span class="line">    <span class="keyword">for</span> (i = <span class="number">1</span>; i &lt;= m;i++)&#123;</span><br><span class="line">        <span class="keyword">if</span>(n%i==<span class="number">0</span>)</span><br><span class="line">        &#123;</span><br><span class="line">            t = n / i;</span><br><span class="line">            <span class="keyword">for</span> (j =i; j &lt;= k;j++)&#123;    </span><br><span class="line">                <span class="keyword">if</span>(t%j==<span class="number">0</span>)&#123;</span><br><span class="line">                    l = t / j;</span><br><span class="line">                    <span class="keyword">if</span>(l&gt;j&amp;&amp;j&gt;i)&#123;</span><br><span class="line">                        ans += <span class="number">6</span>;</span><br><span class="line">                    &#125;</span><br><span class="line">                    <span class="keyword">else</span> <span class="keyword">if</span>(l==j||j==i||l==k)</span><br><span class="line">                        ans += <span class="number">3</span>;</span><br><span class="line">                    </span><br><span class="line">                &#125;</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;      </span><br><span class="line">    &#125;</span><br><span class="line">    cout &lt;&lt; ans;</span><br><span class="line">    <span class="built_in">system</span>(<span class="string">&quot;pause&quot;</span>);</span><br><span class="line">    <span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">&#125;</span><br><span class="line"></span><br></pre>
+
+<h3 id="试题E"><a href="#试题E" class="headerlink" title="试题E"></a>试题E</h3><p><img src="https://img-blog.csdnimg.cn/2021042021071679.jpg?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L2FhYWxhbHVsYQ==,size_16,color_FFFFFF,t_70" alt="在这里插入图片描述" srcset="data:image/svg+xml,%3Csvg%20xmlns='http://www.w3.org/2000/svg'%20viewBox='0%200%20300%20300'%3E%3C/svg%3E" data-src="https://img-blog.csdnimg.cn/2021042021071679.jpg?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L2FhYWxhbHVsYQ==,size_16,color_FFFFFF,t_70" class="lozad post-image"></p>
+<h3 id="试题F"><a href="#试题F" class="headerlink" title="试题F"></a>试题F</h3><blockquote>
+<p>【问题描述】 小蓝要和朋友合作开发一个时间显示的网站。在服务器上，朋友已经获取 了当前的时间，用一个整数表示，值为从 1970 年 1 月1 日 00:00:00 到当前时 刻经过的毫秒数。 现在，小蓝要在客户端显示出这个时间。小蓝不用显示出年月日，只需要 显示出时分秒即可，毫秒也不用显示，直接舍去即可。 给定一个用整数表示的时间，请将这个时间对应的时分秒输出。<br>【输入格式】输入一行包含一个整数，表示时间。<br>【输出格式】 输出时分秒表示的当前时间，格式形如 HH:MM:SS，其中 HH 表示时，值 为 0 到 23，MM 表示分，值为 0 到 59，SS 表示秒，值为 0 到 59。时、分、秒 不足两位时补前导 0。<br>【样例输入 1】 46800999<br>【样例输出 1】 13:00:00<br>【样例输入 2】 1618708103123<br>【样例输出 2】 01:08:23<br>【评测用例规模与约定】 对于所有评测用例，给定的时间为不超过 1018 的正整数。</p>
+</blockquote>
+<pre class="highlight"><span class="line"><span class="meta">#<span class="keyword">include</span><span class="string">&lt;iostream&gt;</span></span></span><br><span class="line"><span class="keyword">using</span> <span class="keyword">namespace</span> std;</span><br><span class="line"><span class="function"><span class="type">int</span> <span class="title">main</span><span class="params">()</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    <span class="type">long</span> <span class="type">long</span> temp;</span><br><span class="line">    cin &gt;&gt; temp;</span><br><span class="line">    <span class="type">int</span> h, m, s;</span><br><span class="line">    </span><br><span class="line">    temp = temp / <span class="number">1000</span>;</span><br><span class="line">    s = temp % <span class="number">60</span>;</span><br><span class="line">    temp = temp / <span class="number">60</span>;</span><br><span class="line">    m = temp % <span class="number">60</span>;</span><br><span class="line">    temp = temp / <span class="number">60</span>;</span><br><span class="line">    h = temp % <span class="number">24</span>;</span><br><span class="line">    </span><br><span class="line">    <span class="built_in">printf</span>(<span class="string">&quot;%02d:%02d:%02d&quot;</span>, h, m, s);</span><br><span class="line">    <span class="built_in">system</span>(<span class="string">&quot;pause&quot;</span>);</span><br><span class="line">    <span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">&#125;</span><br></pre>
+
+<h3 id="试题G"><a href="#试题G" class="headerlink" title="试题G"></a>试题G</h3><blockquote>
+<p>G、砝码称重 【问题描述】 你有一架天平和 N 个砝码，这 N 个砝码重量依次是 W1, W2, · · · , WN。 请你计算一共可以称出多少种不同的重量？ 注意砝码可以放在天平两边。 【输入格式】 输入的第一行包含一个整数 N。 第二行包含 N 个整数：W1, W2, W3, · · · , WN。<br>【输出格式】 输出一个整数代表答案。<br>【样例输入】<br>3<br>1 4 6<br>【样例输出】<br>10<br>【样例说明】<br>能称出的 10 种重量是：1、2、3、4、5、6、7、9、10、11。<br>1 = 1；<br>2 = 6 − 4 (天平一边放 6，另一边放 4)；<br>3 = 4 − 1；<br>4 = 4；<br>5 = 6 − 1；<br>6 = 6；<br> 7 = 1 + 6；<br> 9 = 4 + 6 − 1；<br> 10 = 4 + 6；<br> 11 = 1 + 4 + 6。<br> 【评测用例规模与约定】 对于 50% 的评测用例，1 ≤ N ≤ 15。 对于所有评测用例，1 ≤ N ≤ 100，N 个砝码总重不超过 100000。</p>
+</blockquote>
+<pre class="highlight"><span class="line"><span class="meta">#<span class="keyword">include</span><span class="string">&lt;iostream&gt;</span></span></span><br><span class="line"><span class="keyword">using</span> <span class="keyword">namespace</span> std;</span><br><span class="line"><span class="type">int</span> w[<span class="number">100002</span>], st[<span class="number">10000</span>], sum;</span><br><span class="line"><span class="function"><span class="type">int</span> <span class="title">main</span><span class="params">()</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    <span class="type">int</span> N;</span><br><span class="line">    cin &gt;&gt; N;</span><br><span class="line">    <span class="type">int</span> a[N];</span><br><span class="line">    sum = <span class="number">0</span>;</span><br><span class="line">    <span class="keyword">for</span> (<span class="type">int</span> i = <span class="number">0</span>; i &lt; <span class="number">100002</span>;i++) w[i]=<span class="number">0</span>; </span><br><span class="line">    <span class="keyword">for</span> (<span class="type">int</span> i = <span class="number">0</span>; i &lt; N;i++) cin&gt;&gt;a[i];</span><br><span class="line">    <span class="keyword">for</span> (<span class="type">int</span> i = <span class="number">0</span>; i &lt; N;i++)</span><br><span class="line">    &#123;</span><br><span class="line">        <span class="type">int</span> j = <span class="number">0</span>, sum2 = sum, t;</span><br><span class="line">        <span class="keyword">if</span>(!w[a[i]])&#123;</span><br><span class="line">            w[a[i]] = <span class="number">1</span>;</span><br><span class="line">            st[sum2++] = a[i];</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">for</span> (<span class="type">int</span> j = <span class="number">0</span>; j &lt; sum;j++)</span><br><span class="line">        &#123;</span><br><span class="line">            t = a[i] + st[j];</span><br><span class="line">            <span class="keyword">if</span>(!w[t])&#123;</span><br><span class="line">                w[t] = <span class="number">1</span>;</span><br><span class="line">                st[sum2++] = t;</span><br><span class="line">            &#125;</span><br><span class="line">            t = <span class="built_in">abs</span>(a[i] - st[j]);</span><br><span class="line">            <span class="keyword">if</span>(!w[t])&#123;</span><br><span class="line">                w[t] = <span class="number">1</span>;</span><br><span class="line">                st[sum2++] = t;</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">        sum = sum2;</span><br><span class="line">    &#125;</span><br><span class="line">    cout &lt;&lt; sum;</span><br><span class="line">    <span class="built_in">system</span>(<span class="string">&quot;pause&quot;</span>);</span><br><span class="line">    <span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">&#125;</span><br></pre>
+
+<h3 id="试题H"><a href="#试题H" class="headerlink" title="试题H"></a>试题H</h3><blockquote>
+<p>H、杨辉三角形<br>【问题描述】<br>下面的图形是著名的杨辉三角形：<img src="https://img-blog.csdnimg.cn/20210419121650799.png" alt="在这里插入图片描述" srcset="data:image/svg+xml,%3Csvg%20xmlns='http://www.w3.org/2000/svg'%20viewBox='0%200%20300%20300'%3E%3C/svg%3E" data-src="https://img-blog.csdnimg.cn/20210419121650799.png" class="lozad post-image"><br>如果我们按从上到下、从左到右的顺序把所有数排成一列，可以得到如下 数列： 1, 1, 1, 1, 2, 1, 1, 3, 3, 1, 1,<br>4, 6, 4, 1, … 给定一个正整数 N，请你输出数列中第一次出现 N 是在第几个数？<br>【输入格式】<br>输入一个整数 N。<br>【输出格式】<br>输出一个整数代表答案。<br>【样例输入】 6<br>【样例输出】 13<br>【评测用例规模与约定】<br>对于 20% 的评测用例，1 ≤ N ≤ 10； 对于所有评测用例，1 ≤ N ≤ 1000000000。</p>
+</blockquote>
+<pre class="highlight"><span class="line"><span class="meta">#<span class="keyword">include</span><span class="string">&lt;iostream&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="keyword">include</span><span class="string">&lt;math.h&gt;</span></span></span><br><span class="line"><span class="keyword">using</span> <span class="keyword">namespace</span> std;</span><br><span class="line"><span class="type">int</span> a[<span class="number">2002</span>][<span class="number">2005</span>];</span><br><span class="line"><span class="function"><span class="type">int</span> <span class="title">main</span><span class="params">()</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    <span class="type">int</span> N;</span><br><span class="line">    <span class="type">long</span> <span class="type">long</span> sum = <span class="number">0</span>;</span><br><span class="line">    cin &gt;&gt; N;</span><br><span class="line">    <span class="keyword">for</span>(<span class="type">int</span> i=<span class="number">1</span>;i&lt;<span class="number">2002</span>;i++)&#123;</span><br><span class="line">        <span class="type">int</span> j;</span><br><span class="line">        <span class="keyword">for</span>(j=<span class="number">1</span>;j&lt;=i;j++)&#123;</span><br><span class="line">            sum++;</span><br><span class="line">            <span class="keyword">if</span>(j==<span class="number">1</span>||i==j) a[i][j]=<span class="number">1</span>;</span><br><span class="line">            <span class="keyword">else</span> a[i][j]=a[i<span class="number">-1</span>][j<span class="number">-1</span>]+a[i<span class="number">-1</span>][j];</span><br><span class="line">            <span class="keyword">if</span>(a[i][j]==N)&#123;</span><br><span class="line">                cout&lt;&lt;sum;</span><br><span class="line">                <span class="built_in">system</span>(<span class="string">&quot;pause&quot;</span>);</span><br><span class="line">                <span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">            &#125;</span><br><span class="line">        &#125; </span><br><span class="line">    &#125;</span><br><span class="line">    <span class="type">long</span> <span class="type">long</span> n = <span class="built_in">sqrt</span>(<span class="number">2</span> * N) + <span class="number">1</span>;</span><br><span class="line">    <span class="keyword">if</span>(n*(n<span class="number">-1</span>)/<span class="number">2</span>==N)</span><br><span class="line">        cout &lt;&lt; (<span class="type">long</span> <span class="type">long</span>)n * (n + <span class="number">1</span>) / <span class="number">2</span> + <span class="number">3</span>;</span><br><span class="line">    <span class="keyword">else</span></span><br><span class="line">        cout &lt;&lt; (<span class="type">long</span> <span class="type">long</span>)N * (N + <span class="number">1</span>) / <span class="number">2</span> + <span class="number">2</span>;</span><br><span class="line">    <span class="built_in">system</span>(<span class="string">&quot;pause&quot;</span>);</span><br><span class="line">    <span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">&#125;</span><br></pre>
+
+<h3 id="试题I"><a href="#试题I" class="headerlink" title="试题I"></a>试题I</h3><blockquote>
+<p>【问题描述】<br>给定序列 (a1, a2, · · · , an) = (1, 2, · · · , n)，即 ai = i。小蓝将对这个序列进行 m 次操作，每次可能是将 a1, a2, · · · , aqi 降序排列， 或者将 aqi , aqi+1, · · · , an 升序排列。 请求出操作完成后的序列。<br>【输入格式】<br>输入的第一行包含两个整数 n, m，分别表示序列的长度和操作次数。 接下来m 行描述对序列的操作，其中第 i 行包含两个整数 pi, qi 表示操作 类型和参数。当 pi = 0 时，表示将 a1, a2, · · · , aqi 降序排列；当 pi = 1 时，表示 将 aqi , aqi+1, · · · , an 升序排列。<br>【输出格式】<br> 输出一行，包含 n 个整数，相邻的整数之间使用一个空格分隔，表示操作 完成后的序列。<br> 【样例输入】<br>  3 3<br>  0 3<br>  1 2<br>  0 2<br>【样例输出】<br> 3 1 2<br> 【样例说明】<br> 原数列为 (1, 2, 3)。 第 1 步后为 (3, 2, 1)。 第 2 步后为 (3, 1, 2)。 第 3 步后为 (3, 1, 2)。与第 2 步操作后相同，因为前两个数已经是降序了。<br> 【评测用例规模与约定】<br>  对于 30% 的评测用例，n, m ≤ 1000； 对于 60% 的评测用例，n, m ≤ 5000； 对于所有评测用例，1 ≤ n, m ≤<br>100000，0 ≤ ai ≤ 1，1 ≤ bi ≤ n。</p>
+</blockquote>
+<pre class="highlight"><span class="line"><span class="meta">#<span class="keyword">include</span><span class="string">&lt;iostream&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="keyword">include</span><span class="string">&lt;algorithm&gt;</span></span></span><br><span class="line"><span class="keyword">using</span> <span class="keyword">namespace</span> std;</span><br><span class="line"><span class="function"><span class="type">bool</span> <span class="title">cmp</span><span class="params">(<span class="type">int</span> a,<span class="type">int</span> b)</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    <span class="keyword">return</span> a &gt; b;</span><br><span class="line">&#125;</span><br><span class="line"><span class="function"><span class="type">int</span> <span class="title">main</span><span class="params">()</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    <span class="type">int</span> a[<span class="number">5000</span>], n, m;</span><br><span class="line">    cin &gt;&gt; n &gt;&gt; m;</span><br><span class="line">    <span class="keyword">for</span> (<span class="type">int</span> i = <span class="number">0</span>; i &lt;= n;i++) a[i]=i;</span><br><span class="line">    <span class="keyword">for</span> (<span class="type">int</span> i = <span class="number">0</span>; i &lt; m;i++)</span><br><span class="line">    &#123;</span><br><span class="line">        <span class="type">int</span> pi, qi;</span><br><span class="line">        cin &gt;&gt; pi &gt;&gt; qi;</span><br><span class="line">        <span class="keyword">if</span>(pi)</span><br><span class="line">            <span class="built_in">sort</span>(a + n - qi + <span class="number">1</span>, a + n + <span class="number">1</span>);</span><br><span class="line">        <span class="keyword">else</span> </span><br><span class="line">            <span class="built_in">sort</span>(a + <span class="number">1</span>, a + qi + <span class="number">1</span>, cmp);</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">for</span> (<span class="type">int</span> i = <span class="number">1</span>; i &lt;= n;i++)</span><br><span class="line">        cout &lt;&lt; a[i] &lt;&lt; <span class="string">&quot; &quot;</span>;</span><br><span class="line">    <span class="built_in">system</span>(<span class="string">&quot;pause&quot;</span>);</span><br><span class="line">    <span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">&#125;</span><br></pre>
+
+<h3 id="试题J"><a href="#试题J" class="headerlink" title="试题J"></a>试题J</h3><blockquote>
+<p>J、括号序列 【问题描述】 给定一个括号序列，要求尽可能少地添加若干括号使得括号序列变得合法，<br>当添加完成后，会产生不同的添加结果，请问有多少种本质不同的添加结果。 两个结果是本质不同的是指存在某个位置一个结果是左括号，而另一个是右括<br>号。 例如，对于括号序列 ((()，只需要添加两个括号就能让其合法，有以下几<br>种不同的添加结果：()()()、()(())、(())()、(()()) 和 ((()))。 【输入格式】 输入一行包含一个字符串<br>s，表示给定的括号序列，序列中只有左括号和 右括号。 【输出格式】 输出一个整数表示答案，答案可能很大，请输出答案除以 1000000007<br>(即 109 + 7) 的余数。 【样例输入】 ((() 【样例输出】 5 【评测用例规模与约定】 对于 40% 的评测用例，|s| ≤<br>200。 对于所有评测用例，1 ≤ |s| ≤ 5000。</p>
+</blockquote>
+<h2 id="个人总结"><a href="#个人总结" class="headerlink" title="个人总结"></a>个人总结</h2>
+  </div>
+  <div>
+    
+      <div 
+        class="post-note note-warning copyright" 
+        style="margin-top: 42px">
+        <p>
+          <span style="font-weight: bold;">作者：</span><a 
+            target="_blank" 
+            rel="nofollow noopener noreferrer" 
+            href="/about">
+            shensaijie
+          </a>
+        </p>
+        <p>
+          <span style="font-weight: bold;">文章链接：</span><a 
+            target="_blank" 
+            rel="nofollow noopener noreferrer" 
+            href="http://shensaijie.github.io/2021/04/21/2021%E5%B9%B4%E7%AC%AC%E5%8D%81%E4%BA%8C%E5%B1%8A%E8%93%9D%E6%A1%A5%E6%9D%AF%E7%9C%81%E8%B5%9BB%E7%BB%84C_C++%E6%80%BB%E7%BB%93/">
+            http://shensaijie.github.io/2021/04/21/2021%E5%B9%B4%E7%AC%AC%E5%8D%81%E4%BA%8C%E5%B1%8A%E8%93%9D%E6%A1%A5%E6%9D%AF%E7%9C%81%E8%B5%9BB%E7%BB%84C_C++%E6%80%BB%E7%BB%93/
+          </a>
+        </p>
+        <p><span style="font-weight: bold;">版权声明：</span>本博客所有文章除特别声明外，均采用<a target="_blank" rel="noopener" href="https://creativecommons.org/licenses/by-nc-sa/4.0/deed.zh">CC BY-NC-SA 4.0 协议</a>。转载请注明出处！</p>
+      </div>
+    
+  </div>
+</article>
+<div class="nav">
+  
+    <div class="nav-item-prev">
+      <a 
+        href="/2021/08/01/python%E7%88%AC%E8%99%AB%E5%BC%80%E5%8F%91%EF%BC%9A%E4%BB%8E%E5%85%A5%E9%97%A8%E5%88%B0%E5%AE%9E%E6%88%98%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0%EF%BC%88%E4%B8%80%EF%BC%89python%E5%9F%BA%E7%A1%80%20/" 
+        class="nav-link">
+        <i class="iconfont icon-left nav-prev-icon"></i>
+        <div>
+          <div class="nav-label">上一篇</div>
+          
+            <div class="nav-title">python爬虫开发：（一） </div>
+          
+        </div>
+      </a>
+    </div>
+  
+  
+    <div class="nav-item-next">
+      <a 
+        href="/2021/04/21/C%E5%92%8CC++%E6%B8%B8%E6%88%8F%E8%B6%A3%E5%91%B3%E7%BC%96%E7%A8%8B%EF%BC%88%E4%B8%89%EF%BC%89Easyx%E5%9B%BE%E5%BD%A2%E5%BA%93%E5%85%A5%E9%97%A8%E4%B8%8E%E7%94%9F%E5%91%BD%E6%B8%B8%E6%88%8F/" 
+        class="nav-link">
+        <div>
+          <div class="nav-label">下一篇</div>
+          
+            <div class="nav-title">c/c++游戏编程生命游戏 </div>
+          
+        </div>
+        <i class="iconfont icon-right nav-next-icon"></i>
+      </a>
+    </div>
+  
+</div>
+
+<div 
+  class="card card-content toc-card" 
+  id="mobiletoc">
+  <div class="toc-header">
+  <i 
+    class="iconfont icon-menu" 
+    style="padding-right: 2px;">
+  </i>目录
+</div>
+<ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#2021%E5%B9%B4%E7%AC%AC%E5%8D%81%E4%BA%8C%E5%B1%8A%E8%93%9D%E6%A1%A5%E6%9D%AF%E7%9C%81%E8%B5%9BB%E7%BB%84C-C-%E6%80%BB%E7%BB%93"><span class="toc-text">2021年第十二届蓝桥杯省赛B组C&#x2F;C++总结</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E9%97%AE%E9%A2%98%E5%8F%8A%E5%A4%84%E7%90%86%E6%96%B9%E6%B3%95"><span class="toc-text">问题及处理方法</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E9%A2%98A%EF%BC%9A"><span class="toc-text">题A：</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E9%A2%98B%EF%BC%9A"><span class="toc-text">题B：</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E8%AF%95%E9%A2%98C"><span class="toc-text">试题C</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E8%AF%95%E9%A2%98D"><span class="toc-text">试题D</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E8%AF%95%E9%A2%98E"><span class="toc-text">试题E</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E8%AF%95%E9%A2%98F"><span class="toc-text">试题F</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E8%AF%95%E9%A2%98G"><span class="toc-text">试题G</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E8%AF%95%E9%A2%98H"><span class="toc-text">试题H</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E8%AF%95%E9%A2%98I"><span class="toc-text">试题I</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E8%AF%95%E9%A2%98J"><span class="toc-text">试题J</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E4%B8%AA%E4%BA%BA%E6%80%BB%E7%BB%93"><span class="toc-text">个人总结</span></a></li></ol></li></ol>
+</div></main>
+            <aside class="left-column">
+              
+              <div class="card card-author">
+                
+  <img 
+    src="/img/avatar.jpg" 
+    class="author-img"
+    width="88"
+    height="88"
+    alt="author avatar"
+    style="border-radius: 50%; overflow: hidden;">
+
+<p class="author-name">shensj</p>
+<p class="author-description">人不能两次踩到同一个坑里。</p>
+<div class="author-message">
+  <a 
+    class="author-posts-count" 
+    href="/archives">
+    <span>15</span>
+    <span>文章</span>
+  </a>
+  <a 
+    class="author-categories-count" 
+    href="/categories">
+    <span>5</span>
+    <span>分类</span>
+  </a>
+  <a 
+    class="author-tags-count" 
+    href="/tags">
+    <span>22</span>
+    <span>标签</span>
+  </a>
+</div>
+
+  <div class="author-card-society">
+    
+      <div class="author-card-society-icon">
+        <a target="_blank" rel="noopener" href="https://blog.csdn.net/aaalalula">
+          <i class="iconfont icon-bilibili society-icon"></i>
+        </a>
+      </div>
+    
+      <div class="author-card-society-icon">
+        <a target="_blank" rel="noopener" href="https://github/shensaijie">
+          <i class="iconfont icon-github society-icon"></i>
+        </a>
+      </div>
+    
+      <div class="author-card-society-icon">
+        <a target="_blank" rel="noopener" href="https://www.google.cn/chrome">
+          <i class="iconfont icon-chrome society-icon"></i>
+        </a>
+      </div>
+    
+  </div>
+
+              </div>
+               <div class="sticky-tablet">
+  
+  
+    <article class="display-when-two-columns spacer">
+      <div class="card card-content toc-card">
+        <div class="toc-header">
+  <i 
+    class="iconfont icon-menu" 
+    style="padding-right: 2px;">
+  </i>目录
+</div>
+<ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#2021%E5%B9%B4%E7%AC%AC%E5%8D%81%E4%BA%8C%E5%B1%8A%E8%93%9D%E6%A1%A5%E6%9D%AF%E7%9C%81%E8%B5%9BB%E7%BB%84C-C-%E6%80%BB%E7%BB%93"><span class="toc-text">2021年第十二届蓝桥杯省赛B组C&#x2F;C++总结</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E9%97%AE%E9%A2%98%E5%8F%8A%E5%A4%84%E7%90%86%E6%96%B9%E6%B3%95"><span class="toc-text">问题及处理方法</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E9%A2%98A%EF%BC%9A"><span class="toc-text">题A：</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E9%A2%98B%EF%BC%9A"><span class="toc-text">题B：</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E8%AF%95%E9%A2%98C"><span class="toc-text">试题C</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E8%AF%95%E9%A2%98D"><span class="toc-text">试题D</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E8%AF%95%E9%A2%98E"><span class="toc-text">试题E</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E8%AF%95%E9%A2%98F"><span class="toc-text">试题F</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E8%AF%95%E9%A2%98G"><span class="toc-text">试题G</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E8%AF%95%E9%A2%98H"><span class="toc-text">试题H</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E8%AF%95%E9%A2%98I"><span class="toc-text">试题I</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E8%AF%95%E9%A2%98J"><span class="toc-text">试题J</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E4%B8%AA%E4%BA%BA%E6%80%BB%E7%BB%93"><span class="toc-text">个人总结</span></a></li></ol></li></ol>
+      </div>
+    </article>
+  
+  
+  <article class="card card-content categories-widget">
+    <div class="categories-card">
+  <div class="categories-header">
+    <i 
+      class="iconfont icon-fenlei" 
+      style="padding-right: 2px;">
+    </i>分类
+  </div>
+  <div class="categories-list">
+    
+      <a href="/categories/%E7%AE%97%E6%B3%95%E7%AB%9E%E8%B5%9B/">
+        <div class="categories-list-item">
+          算法竞赛
+          <span class="categories-list-item-badge">4</span>
+        </div>
+      </a>
+    
+      <a href="/categories/c-c/">
+        <div class="categories-list-item">
+          c-c
+          <span class="categories-list-item-badge">3</span>
+        </div>
+      </a>
+    
+      <a href="/categories/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F/">
+        <div class="categories-list-item">
+          操作系统
+          <span class="categories-list-item-badge">3</span>
+        </div>
+      </a>
+    
+      <a href="/categories/%E5%B5%8C%E5%85%A5%E5%BC%8F/">
+        <div class="categories-list-item">
+          嵌入式
+          <span class="categories-list-item-badge">2</span>
+        </div>
+      </a>
+    
+      <a href="/categories/python/">
+        <div class="categories-list-item">
+          python
+          <span class="categories-list-item-badge">3</span>
+        </div>
+      </a>
+    
+  </div>
+</div>
+  </article>
+  
+  <article class="card card-content tags-widget">
+    <div class="tags-card">
+  <div class="tags-header">
+    <i 
+      class="iconfont icon-biaoqian" 
+      style="padding-right: 2px;">
+    </i>热门标签
+  </div>
+  <div class="tags-list">
+    
+      <a 
+        href="/tags/c-c/" 
+        title="c/c++">
+        <div class="tags-list-item">c/c++</div>
+      </a>
+    
+      <a 
+        href="/tags/%E7%88%AC%E8%99%AB/" 
+        title="爬虫">
+        <div class="tags-list-item">爬虫</div>
+      </a>
+    
+      <a 
+        href="/tags/python/" 
+        title="python">
+        <div class="tags-list-item">python</div>
+      </a>
+    
+      <a 
+        href="/tags/%E6%B8%B8%E6%88%8F/" 
+        title="游戏">
+        <div class="tags-list-item">游戏</div>
+      </a>
+    
+      <a 
+        href="/tags/%E7%AE%97%E6%B3%95/" 
+        title="算法">
+        <div class="tags-list-item">算法</div>
+      </a>
+    
+      <a 
+        href="/tags/%E5%B5%8C%E5%85%A5%E5%BC%8F/" 
+        title="嵌入式">
+        <div class="tags-list-item">嵌入式</div>
+      </a>
+    
+      <a 
+        href="/tags/%E8%93%9D%E6%A1%A5%E6%9D%AF/" 
+        title="蓝桥杯">
+        <div class="tags-list-item">蓝桥杯</div>
+      </a>
+    
+      <a 
+        href="/tags/CLOCK/" 
+        title="CLOCK">
+        <div class="tags-list-item">CLOCK</div>
+      </a>
+    
+      <a 
+        href="/tags/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F%EF%BC%8CLRU/" 
+        title="操作系统，LRU">
+        <div class="tags-list-item">操作系统，LRU</div>
+      </a>
+    
+      <a 
+        href="/tags/RTC/" 
+        title="RTC">
+        <div class="tags-list-item">RTC</div>
+      </a>
+    
+      <a 
+        href="/tags/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F%EF%BC%8C%E9%93%B6%E8%A1%8C%E5%AE%B6%E7%AE%97%E6%B3%95/" 
+        title="操作系统，银行家算法">
+        <div class="tags-list-item">操作系统，银行家算法</div>
+      </a>
+    
+      <a 
+        href="/tags/%E6%AD%A3%E5%88%99%E8%A1%A8%E8%BE%BE%E5%BC%8F/" 
+        title="正则表达式">
+        <div class="tags-list-item">正则表达式</div>
+      </a>
+    
+      <a 
+        href="/tags/web%E6%89%93%E5%BC%80%E6%96%B9%E5%BC%8F/" 
+        title="web打开方式">
+        <div class="tags-list-item">web打开方式</div>
+      </a>
+    
+      <a 
+        href="/tags/python%E8%AF%AD%E6%B3%95/" 
+        title="python语法">
+        <div class="tags-list-item">python语法</div>
+      </a>
+    
+      <a 
+        href="/tags/%E6%8E%A5%E5%8F%A3/" 
+        title="接口">
+        <div class="tags-list-item">接口</div>
+      </a>
+    
+      <a 
+        href="/tags/%E8%AE%BE%E5%A4%87%E9%A9%B1%E5%8A%A8/" 
+        title="设备驱动">
+        <div class="tags-list-item">设备驱动</div>
+      </a>
+    
+  </div>
+</div>
+  </article>
+  
+  
+</div>
+            </aside>
+            <aside class="right-column">
+              <div class="sticky-widescreen">
+  
+  
+    <article class="card card-content toc-card">
+      <div class="toc-header">
+  <i 
+    class="iconfont icon-menu" 
+    style="padding-right: 2px;">
+  </i>目录
+</div>
+<ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#2021%E5%B9%B4%E7%AC%AC%E5%8D%81%E4%BA%8C%E5%B1%8A%E8%93%9D%E6%A1%A5%E6%9D%AF%E7%9C%81%E8%B5%9BB%E7%BB%84C-C-%E6%80%BB%E7%BB%93"><span class="toc-text">2021年第十二届蓝桥杯省赛B组C&#x2F;C++总结</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E9%97%AE%E9%A2%98%E5%8F%8A%E5%A4%84%E7%90%86%E6%96%B9%E6%B3%95"><span class="toc-text">问题及处理方法</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E9%A2%98A%EF%BC%9A"><span class="toc-text">题A：</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E9%A2%98B%EF%BC%9A"><span class="toc-text">题B：</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E8%AF%95%E9%A2%98C"><span class="toc-text">试题C</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E8%AF%95%E9%A2%98D"><span class="toc-text">试题D</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E8%AF%95%E9%A2%98E"><span class="toc-text">试题E</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E8%AF%95%E9%A2%98F"><span class="toc-text">试题F</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E8%AF%95%E9%A2%98G"><span class="toc-text">试题G</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E8%AF%95%E9%A2%98H"><span class="toc-text">试题H</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E8%AF%95%E9%A2%98I"><span class="toc-text">试题I</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E8%AF%95%E9%A2%98J"><span class="toc-text">试题J</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E4%B8%AA%E4%BA%BA%E6%80%BB%E7%BB%93"><span class="toc-text">个人总结</span></a></li></ol></li></ol>
+    </article>
+  
+  
+  <article class="card card-content">
+    <div class="recent-posts-card">
+  <div class="recent-posts-header">
+    <i 
+      class="iconfont icon-wenzhang_huaban" 
+      style="padding-right: 2px;">
+    </i>最近文章
+  </div>
+  <div class="recent-posts-list">
+    
+      <div class="recent-posts-item">
+        <div class="recent-posts-item-title">2022-04-13</div>
+        <a href="/2022/04/13/%E8%B8%A9%E8%BF%87%E7%9A%84c_c++%E7%9A%84%E5%9D%91/"><div class="recent-posts-item-content">那些踩过c/c++的坑</div></a>
+      </div>
+    
+      <div class="recent-posts-item">
+        <div class="recent-posts-item-title">2022-04-13</div>
+        <a href="/2022/04/13/%E5%8D%81%E4%B8%89%E5%B1%8A%E8%93%9D%E6%A1%A5%E6%9D%AFc_c++B%E7%BB%84%E8%AF%95%E9%A2%98/"><div class="recent-posts-item-content">2022年第十三届蓝桥杯省赛B组C/C++总结</div></a>
+      </div>
+    
+      <div class="recent-posts-item">
+        <div class="recent-posts-item-title">2021-12-02</div>
+        <a href="/2021/12/02/HBCPC2021%E7%9C%81%E8%B5%9B%E2%80%94%E2%80%94Problem%20H.%20%E4%BF%A1%20%E5%8F%B7%20%E4%BC%A0%20%E8%BE%93/"><div class="recent-posts-item-content">HBCPC河北省赛</div></a>
+      </div>
+    
+      <div class="recent-posts-item">
+        <div class="recent-posts-item-title">2021-11-26</div>
+        <a href="/2021/11/26/%E8%AF%B7%E6%B1%82%E9%A1%B5%E5%BC%8F%E5%AD%98%E5%82%A8%E7%AE%A1%E7%90%86%E5%9F%BA%E6%9C%AC%E7%BD%AE%E6%8D%A2%E7%AE%97%E6%B3%95LRU%E4%B8%8ECLOCK/"><div class="recent-posts-item-content">操作系统页面置换算法</div></a>
+      </div>
+    
+  </div>
+</div>
+  </article>
+  
+  
+</div>
+            </aside>
+          </div>
+        </div>
+      </div>
+    </div>
+     
+    <footer class="footer">
+  <div class="footer-container">
+    <div>
+      <div class="footer-dsc">
+        <span>
+          Copyright ©
+          
+            2020
+          
+          
+                - 
+                2022
+          
+        </span>
+        &nbsp;
+        <a 
+          href="/" 
+          class="footer-link">
+          shensj's blog
+        </a>
+      </div>
+    </div>
+
+    
+    
+    
+    
+</footer>
+ 
+    
+  <a 
+    role="button" 
+    id="scrollbutton" 
+    class="basebutton" 
+    aria-label="回到顶部">
+    <i class="iconfont icon-arrowleft button-icon"></i>
+  </a>
+
+<a 
+  role="button" 
+  id="menubutton"
+  aria-label="menu button"
+  class="basebutton">
+  <i class="iconfont icon-menu button-icon"></i>
+</a>
+<a 
+  role="button" 
+  id="popbutton" 
+  class="basebutton" 
+  aria-label="控制中心">
+  <i class="iconfont icon-expand button-icon"></i>
+</a>
+<a 
+  role="button" 
+  id="darkbutton" 
+  class="basebutton darkwidget" 
+  aria-label="夜色模式">
+  <i class="iconfont icon-weather button-icon"></i>
+</a>
+<a 
+  role="button" 
+  id="searchbutton" 
+  class="basebutton searchwidget" 
+  aria-label="搜索">
+  <i class="iconfont icon-search button-icon"></i>
+</a> 
+     
+     
+     
+      <script>
+  var addImgLayout = function () {
+    var img = document.querySelectorAll('.post-content img')
+    var i
+    for (i = 0; i < img.length; i++) {
+      var wrapper = document.createElement('a')
+      wrapper.setAttribute('href', img[i].getAttribute('data-src'))
+      wrapper.setAttribute('aria-label', 'illustration')
+      wrapper.style.cssText =
+        'width: 100%; display: flex; justify-content: center;'
+      if (img[i].alt) wrapper.dataset.caption = img[i].alt
+      wrapper.dataset.nolink = true
+      img[i].before(wrapper)
+      wrapper.append(img[i])
+      var divWrap = document.createElement('div')
+      divWrap.classList.add('gallery')
+      wrapper.before(divWrap)
+      divWrap.append(wrapper)
+    }
+    baguetteBox.run('.gallery')
+  }
+</script>
+<script>
+  loadScript(
+    "/js/lib/lightbox/baguetteBox.min.js",
+    addImgLayout
+  )
+</script>
+ 
+     
+     
+    <script src="/js/main.js"></script> 
+     
+    
+      <script>
+        var addLazyload = function () {
+          var observer = lozad('.lozad', {
+            load: function (el) {
+              el.srcset = el.getAttribute('data-src')
+            },
+            loaded: function (el) {
+              el.classList.add('loaded')
+            },
+          })
+          observer.observe()
+        }
+      </script>
+      <script>
+        loadScript('/js/lib/lozad.min.js', addLazyload)
+      </script>
+     
+    
+    
+  </body>
+</html>
