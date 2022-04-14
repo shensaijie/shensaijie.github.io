@@ -33,7 +33,7 @@
     
       <meta 
         property="og:img" 
-        content="/img/hexo.png">
+        content="/img/bug.jpg">
     
     
     
@@ -263,8 +263,8 @@
             <main class="main-column">
   <div class="image-wrapper">
     <img 
-      src="/img/hexo.png" 
-      data-src="/img/hexo.png"
+      src="/img/bug.jpg" 
+      data-src="/img/bug.jpg"
       srcset="data:image/svg+xml,%3Csvg%20xmlns=&#39;http://www.w3.org/2000/svg&#39;%20viewBox=&#39;0%200%20300%20300&#39;%3E%3C/svg%3E"
       class="image lozad"
       alt="那些踩过c/c++的坑 thumbnail">
@@ -296,7 +296,7 @@
     
     
       <span class="dot"></span>
-      <span>152 字</span>
+      <span>257 字</span>
     
   </div>
   
@@ -323,13 +323,16 @@
   <div 
     id="section" 
     class="post-content">
-    <h1 id="竞赛踩过的c-c-的坑"><a href="#竞赛踩过的c-c-的坑" class="headerlink" title="竞赛踩过的c/c++的坑"></a>竞赛踩过的c/c++的坑</h1><h2 id="数据"><a href="#数据" class="headerlink" title="数据"></a>数据</h2><ol>
+    <p>记录竞赛踩过的c/c++的坑，没有被坑过不能说自己学会了一门编程语言。明明知道了怎么做，却忽视了一些细节，在竞赛中就可能丢掉一半分，软件开发中就可能留下重大安全隐患。差之毫厘，谬以千里，扎实的基础才能让我们不犯错。仅以本文记录那些破防的小小小错误。</p>
+<h2 id="数据"><a href="#数据" class="headerlink" title="数据"></a>数据</h2><ol>
 <li><p>输入输出能用scnaf就不要用cin</p>
 <pre class="highlight"><span class="line">cin &gt;&gt; n;</span><br><span class="line"><span class="built_in">scanf</span>(<span class="string">&quot;%d&quot;</span>,&amp;n);<span class="comment">//读取更快，数据量大时必须用用</span></span><br></pre></li>
 <li><p>取模运算</p>
 <p> 取模运算后有可能正数变为负数，如果结果为正一定要有(a+mod)%mod。</p>
 <p> 例：a=4,b=-2,mod=3,两数去摸后相加为1-2=-1</p>
 </li>
+</ol>
+<h2 id="头文件"><a href="#头文件" class="headerlink" title="头文件"></a>头文件</h2><ol>
 <li><p>dev编译器</p>
 <p> 能用万能头文件&lt;bits/stdc++.h&gt;就用。dev兼容性太好了，我用了sqrt函数、没写头文件，它竟然不报错。。。本地运行100%正确，交上oj样例都过不了。</p>
 </li>
@@ -390,7 +393,7 @@
     style="padding-right: 2px;">
   </i>目录
 </div>
-<ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#%E7%AB%9E%E8%B5%9B%E8%B8%A9%E8%BF%87%E7%9A%84c-c-%E7%9A%84%E5%9D%91"><span class="toc-text">竞赛踩过的c&#x2F;c++的坑</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E6%95%B0%E6%8D%AE"><span class="toc-text">数据</span></a></li></ol></li></ol>
+<ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E6%95%B0%E6%8D%AE"><span class="toc-text">数据</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%A4%B4%E6%96%87%E4%BB%B6"><span class="toc-text">头文件</span></a></li></ol>
 </div></main>
             <aside class="left-column">
               
@@ -422,7 +425,7 @@
   <a 
     class="author-tags-count" 
     href="/tags">
-    <span>22</span>
+    <span>23</span>
     <span>标签</span>
   </a>
 </div>
@@ -461,7 +464,7 @@
     style="padding-right: 2px;">
   </i>目录
 </div>
-<ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#%E7%AB%9E%E8%B5%9B%E8%B8%A9%E8%BF%87%E7%9A%84c-c-%E7%9A%84%E5%9D%91"><span class="toc-text">竞赛踩过的c&#x2F;c++的坑</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E6%95%B0%E6%8D%AE"><span class="toc-text">数据</span></a></li></ol></li></ol>
+<ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E6%95%B0%E6%8D%AE"><span class="toc-text">数据</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%A4%B4%E6%96%87%E4%BB%B6"><span class="toc-text">头文件</span></a></li></ol>
       </div>
     </article>
   
@@ -568,6 +571,18 @@
       </a>
     
       <a 
+        href="/tags/%E5%8A%A8%E6%80%81%E4%BC%98%E5%85%88%E6%9D%83/" 
+        title="动态优先权">
+        <div class="tags-list-item">动态优先权</div>
+      </a>
+    
+      <a 
+        href="/tags/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F/" 
+        title="操作系统">
+        <div class="tags-list-item">操作系统</div>
+      </a>
+    
+      <a 
         href="/tags/CLOCK/" 
         title="CLOCK">
         <div class="tags-list-item">CLOCK</div>
@@ -609,18 +624,6 @@
         <div class="tags-list-item">python语法</div>
       </a>
     
-      <a 
-        href="/tags/%E6%8E%A5%E5%8F%A3/" 
-        title="接口">
-        <div class="tags-list-item">接口</div>
-      </a>
-    
-      <a 
-        href="/tags/%E8%AE%BE%E5%A4%87%E9%A9%B1%E5%8A%A8/" 
-        title="设备驱动">
-        <div class="tags-list-item">设备驱动</div>
-      </a>
-    
   </div>
 </div>
   </article>
@@ -639,7 +642,7 @@
     style="padding-right: 2px;">
   </i>目录
 </div>
-<ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#%E7%AB%9E%E8%B5%9B%E8%B8%A9%E8%BF%87%E7%9A%84c-c-%E7%9A%84%E5%9D%91"><span class="toc-text">竞赛踩过的c&#x2F;c++的坑</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E6%95%B0%E6%8D%AE"><span class="toc-text">数据</span></a></li></ol></li></ol>
+<ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E6%95%B0%E6%8D%AE"><span class="toc-text">数据</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%A4%B4%E6%96%87%E4%BB%B6"><span class="toc-text">头文件</span></a></li></ol>
     </article>
   
   
